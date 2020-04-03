@@ -151,7 +151,7 @@
 			},
 			change: function() {
 				markerPosition(true);
-                                $('.marker, .overlay').fadeOut('slow');
+                                if (!$('body').hasClass('playing')) $('.marker, .overlay').fadeOut('slow');
 			}
 		});
                 
@@ -191,12 +191,16 @@
 			if (socket && remote) {
 				socket.emit('clientCommand', 'updateTime', '00:00:00');
 			}
-
-			if ($('.teleprompter').hasClass('flipy')) {
-				$('.teleprompter').removeClass('flipy').toggleClass('flipxy');
-			} else {
-				$('.teleprompter').toggleClass('flipx');
+                        
+			if ($('.teleprompter').hasClass('flipxy')){
+                            $('.teleprompter').removeClass('flipxy').addClass('flipy');
+                        }else $('.teleprompter').toggleClass('flipx');
+                        
+			if ($('.teleprompter').hasClass('flipx') && $('.teleprompter').hasClass('flipy')) {
+                            $('.teleprompter').removeClass('flipx').removeClass('flipy').addClass('flipxy');
 			}
+                        
+                        $('.button.flipx').toggleClass("active");
 		});
 
 		// Listen for FlipY Button Click
@@ -207,12 +211,16 @@
 			if (socket && remote) {
 				socket.emit('clientCommand', 'updateTime', '00:00:00');
 			}
-
-			if ($('.teleprompter').hasClass('flipx')) {
-				$('.teleprompter').removeClass('flipx').toggleClass('flipxy');
-			} else {
-				$('.teleprompter').toggleClass('flipy');
+                        
+                        if ($('.teleprompter').hasClass('flipxy')){
+                            $('.teleprompter').removeClass('flipxy').addClass('flipx');
+                        }else $('.teleprompter').toggleClass('flipy');
+                        
+			if ($('.teleprompter').hasClass('flipx') && $('.teleprompter').hasClass('flipy')) {
+                            $('.teleprompter').removeClass('flipx').removeClass('flipy').addClass('flipxy');
 			}
+                        
+                        $('.button.flipy').toggleClass("active");
 
 			if ($('.teleprompter').hasClass('flipy')) {
 				$('article').stop().animate({
@@ -439,9 +447,10 @@
         
 
 	// Manage Scrolling Teleprompter
-	function pageScroll(direction) {
-		var offset = 1;
+	function pageScroll(direction, offset) {
 		var animate = 0;
+                
+                if (!offset) offset = 1;
 
 		if (!direction) {
 			direction = 'down'
@@ -494,13 +503,22 @@
 	// Listen for Key Presses on Body
 	function navigate(evt) {
 		var space = 32,
-			escape = 27,
-			left = 37,
-			up = 38,
-			right = 39,
-			down = 40,
-			speed = $('.speed').slider('value'),
-			font_size = $('.font_size').slider('value');
+                    pause = 80, // letter V for letter P use 80
+                    escape = 27,
+                    left = 37,
+                    right = 39,
+                    up = 38,
+                    down = 40,
+                    font_up = 70,   // F char
+                    font_down = 71, // G char
+                    mirror_x = 88, // Y char
+                    mirror_y = 89, // X char
+                    width_up = 69, // E charr
+                    width_down = 87, // W char
+                    marker_up = 77, // M char
+                    marker_down = 78, // N char
+                    speed = $('.speed').slider('value'),
+                    font_size = $('.font_size').slider('value');
 
 		// Exit if we're inside an input field
 		if (typeof evt.target.id == 'undefined' || evt.target.id == 'teleprompter') {
@@ -519,7 +537,7 @@
 			return false;
 		}
 		// Start Stop Scrolling
-		else if (evt.keyCode == space) {
+		else if (evt.keyCode == space || evt.keyCode == pause /* letter v - quieter key*/) {
 			$('.button.play').trigger('click');
 			evt.preventDefault();
 			evt.stopPropagation();
@@ -527,32 +545,93 @@
 		}
 		// Decrease Speed with Left Arrow
 		else if (evt.keyCode == left) {
-			$('.speed').slider('value', speed - 1);
-			evt.preventDefault();
-			evt.stopPropagation();
-			return false;
-		}
-		// Decrease Font Size with Down Arrow
-		else if (evt.keyCode == down) {
-			$('.font_size').slider('value', font_size - 1);
-			evt.preventDefault();
-			evt.stopPropagation();
-			return false;
-		}
-		// Increase Font Size with Up Arrow
-		else if (evt.keyCode == up) {
-			$('.font_size').slider('value', font_size + 1);
+			$('.speed').slider('value', speed - 2);
 			evt.preventDefault();
 			evt.stopPropagation();
 			return false;
 		}
 		// Increase Speed with Right Arrow
 		else if (evt.keyCode == right) {
-			$('.speed').slider('value', speed + 1);
+			$('.speed').slider('value', speed + 2);
 			evt.preventDefault();
 			evt.stopPropagation();
 			return false;
 		}
+		// Decrease Font Size with Minus
+		else if (evt.keyCode == font_down) {
+			$('.font_size').slider('value', font_size - 1);
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
+		}
+		// Increase Font Size with Plus
+		else if (evt.keyCode == font_up) {
+			$('.font_size').slider('value', font_size + 1);
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
+		}
+		// Move scroller down
+		else if (evt.keyCode == down) {
+                        $('article').scrollTop($('article').scrollTop() - font_size/4);
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
+		}
+		// Move scroller up
+		else if (evt.keyCode == up) {
+			$('article').scrollTop($('article').scrollTop() + font_size/4);
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
+		}
+                // Flip text on X axis
+		else if (evt.keyCode == mirror_x) {
+			$('.button.flipx').trigger("click");
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
+		}
+                // Flip text on y axis
+		else if (evt.keyCode == mirror_y) {
+			$('.button.flipy').trigger("click");
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
+		}
+                // Prompter width up
+		else if (evt.keyCode == width_up) {
+			$('.prompter_width').slider('option','value', $('.prompter_width').slider('value') + 10);
+                        prompterWidth(save);
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
+		}
+                // Prompter width down
+		else if (evt.keyCode == width_down) {
+			$('.prompter_width').slider('option','value', $('.prompter_width').slider('value') - 10);
+                        prompterWidth(save);
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
+		}
+                // Marker position  up
+		else if (evt.keyCode == marker_up) {
+			$('.marker_position').slider('option','value', $('.marker_position').slider('value') + 5);
+                        markerPosition(save);
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
+		}
+                // Marker position down
+		else if (evt.keyCode == marker_down) {
+			$('.marker_position').slider('option','value', $('.marker_position').slider('value') - 5);
+                        markerPosition(save);
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
+		}
+                
 	}
 
 	// Start Teleprompter

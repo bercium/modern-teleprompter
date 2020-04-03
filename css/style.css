@@ -115,7 +115,7 @@ article .teleprompter.flipx
 	-o-transform: rotateY(180deg);
 	-ms-transform: rotateY(180deg);
 	z-index: 1;
-	pointer-events: none;
+	/*pointer-events: none;*/
 	padding: 300px 50px 1000px 100px !important;
 }
 article .teleprompter.flipy
@@ -125,7 +125,7 @@ article .teleprompter.flipy
 	-o-transform: rotateX(180deg);
 	-ms-transform: rotateX(180deg);
 	z-index: 1;
-	pointer-events: none;
+	/*pointer-events: none;*/
 	padding: 1000px 50px 300px 100px !important;
 }
 article .teleprompter.flipxy
@@ -135,7 +135,7 @@ article .teleprompter.flipxy
 	-o-transform: rotateX(180deg) rotateY(180deg);
 	-ms-transform: rotateX(180deg) rotateY(180deg);
 	z-index: 1;
-	pointer-events: none;
+	/*pointer-events: none;*/
 	padding: 1000px 50px 300px 100px !important;
 }
 .sliders.spacing{
@@ -216,7 +216,7 @@ article .teleprompter.flipxy
 	height: 100px;
 	width: 100%;
 	background-color: #000;
-	background-color: rgba(0,0,0,0.75);
+	background-color: rgba(0,0,0,0.4);
 	z-index: 10;
 }
 .overlay .bottom
@@ -226,7 +226,7 @@ article .teleprompter.flipxy
 	height: 10000px;
 	width: 100%;
 	background-color: #000;
-	background-color: rgba(0,0,0,0.75);
+	background-color: rgba(0,0,0,0.4);
 	overflow: hidden;
 	z-index: 10;
 }
@@ -239,7 +239,7 @@ article .teleprompter.flipxy
 }
 
 .remote-modal {
-	position: absolute;
+    position: absolute;
     top: 0;
     left: 0;
     z-index: 5000;
@@ -248,8 +248,8 @@ article .teleprompter.flipxy
     display: flex;
     align-items: center;
     justify-content: center;
-	overflow: hidden;
-	display: none;
+    overflow: hidden;
+    display: none;
 }
 
 .modal-overlay {
@@ -263,9 +263,9 @@ article .teleprompter.flipxy
 }
 
 .modal-content {
-	z-index: 5002;
-	max-width: 50%;
-	text-align: center;
+    z-index: 5002;
+    max-width: 50%;
+    text-align: center;
 }
 
 .remote-id {
