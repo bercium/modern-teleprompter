@@ -509,8 +509,8 @@
                     right = 39,
                     up = 38,
                     down = 40,
-                    font_up = 70,   // F char
-                    font_down = 71, // G char
+                    font_up = 71,   // G char
+                    font_down = 70, // F char
                     mirror_x = 88, // Y char
                     mirror_y = 89, // X char
                     width_up = 69, // E charr
