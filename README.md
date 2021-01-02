@@ -28,7 +28,7 @@ Finally, we also made an effort to make sure your text will be easy to read.   S
 - **N / M**: Moves Focus Marker Higher / Lower
 
 - **X**: Flips Text Left / Right
-- **X**: Flips Text Up / Down
+- **Y**: Flips Text Up / Down
 
 - **Left / Right**: Slows Down / Speeds Up Teleprompter
 - **Up / Down**: Jumps Forward / Backward (moves text up / down during play)
