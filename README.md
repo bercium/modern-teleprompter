@@ -23,20 +23,15 @@ Finally, we also made an effort to make sure your text will be easy to read.   S
 
 ## Keyboard Shortcuts ##
 
-- **F**: Increases Font Size
-- **G**: Decreases Font Size
-- **W**: Increases Width of the Teleprompter Text
-- **E**: Decreases Width of the Teleprompter Text
-- **N**: Moves Focus Marker Higher
-- **M**: Moves Focus Marker Lower
+- **F / G**: Increases / Decreases Font Size
+- **W / E**: Increases / Decreases Width of the Teleprompter Text
+- **N / M**: Moves Focus Marker Higher / Lower
 
 - **X**: Flips Text Left / Right
 - **X**: Flips Text Up / Down
 
-- **Left**: Slows Down Teleprompter
-- **Right**: Speeds Up Teleprompter
-- **Up**: Jumps Forward (moves text up during play)
-- **Down**: Jumps Backward (moves text down during play)
+- **Left / Right**: Slows Down / Speeds Up Teleprompter
+- **Up / Down**: Jumps Forward / Backward (moves text up / down during play)
 
-- **Space** or **P**: Starts / Stops Teleprompter
+- **Space / P**: Starts / Stops Teleprompter
 - **Escape**: Resets GUI
