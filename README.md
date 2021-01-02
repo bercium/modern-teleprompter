@@ -1,11 +1,11 @@
 ## Updates and changes ##
 
-**New:** Option to change the width of the prompter text
-**New:** Option to move the focus marker up and down.
-**New:** Ability to jump ahead with key arrows. Move text up and down during the playback.
-**Updated:** Shortcuts for all elements with hint on mouse over.
-**Updated:** Speed increments
-**Fixes:** Typos
+- **New:** Option to change the width of the prompter text
+- **New:** Option to move the focus marker up and down.
+- **New:** Ability to jump ahead with key arrows. Move text up and down during the playback.
+- **Updated:** Shortcuts for all elements with hint on mouse over.
+- **Updated:** Speed increments
+- **Fixes:** Typos
 
 
 ## Teleprompter ##
