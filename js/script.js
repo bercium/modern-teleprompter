@@ -265,6 +265,20 @@
 		$('.close-modal').click(function() {
 			$('.remote-modal').hide();
 		});
+                
+                $('.button.upload').click(function() {
+                    $('.button.upload').addClass("active");
+                    //setTimeout(function(){$('.button.upload').removeClass("active");}, 2000);
+                    $.post('cloud.php',   // url
+                            { text: $("#teleprompter").html() }, // data to be submit
+                            function(data, status, jqXHR) {// success callback
+                                $('.button.upload').removeClass("active");
+                             });
+		});
+                
+                $('.button.download').click(function() {
+                    load_data();
+		});
 
 		var currentRemote = config.get('remote-id');
 
@@ -450,7 +464,7 @@
 	function pageScroll(direction, offset) {
 		var animate = 0;
                 
-                if (!offset) offset = 1;
+        if (!offset) offset = 2;
 
 		if (!direction) {
 			direction = 'down'
@@ -499,6 +513,15 @@
 			}
 		}
 	}
+        
+        function load_data(){
+            $('.button.download').addClass("active");
+            $.get('cloud.php',  // url
+                function (data, textStatus, jqXHR) {  // success callback
+                    $("#teleprompter").html(data);
+                    $('.button.download').removeClass("active");
+              });
+        }
 
 	// Listen for Key Presses on Body
 	function navigate(evt) {
@@ -517,6 +540,7 @@
                     width_down = 87, // W char
                     marker_up = 77, // M char
                     marker_down = 78, // N char
+                    load_key = 76, // L char
                     speed = $('.speed').slider('value'),
                     font_size = $('.font_size').slider('value');
 
@@ -631,6 +655,14 @@
 			evt.stopPropagation();
 			return false;
 		}
+                // Marker position down
+		else if (evt.keyCode == load_key) {
+			load_data();
+			evt.preventDefault();
+			evt.stopPropagation();
+			return false;
+		}
+                
                 
 	}
 
@@ -643,7 +675,8 @@
 		$('#teleprompter').attr('contenteditable', false);
 		$('body').addClass('playing');
 		$('.button.play').removeClass('icon-play').addClass('icon-pause');
-		$('header h1, header nav').fadeTo('slow', 0.15);
+		//$('header h1, header nav').fadeTo('slow', 0.15);
+                $('header').fadeOut('fast');
 		$('.marker, .overlay').fadeIn('slow');
 
 		timer.startTimer();
@@ -659,7 +692,8 @@
 
 		clearTimeout(scrollDelay);
 		$('#teleprompter').attr('contenteditable', true);
-		$('header h1, header nav').fadeTo('slow', 1);
+		//$('header h1, header nav').fadeTo('slow', 1);
+                $('header').fadeIn('fast');
 		$('.button.play').removeClass('icon-pause').addClass('icon-play');
 		$('.marker, .overlay').fadeOut('slow');
 		$('body').removeClass('playing');

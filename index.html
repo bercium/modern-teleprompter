@@ -38,12 +38,14 @@
 		<header>
 			<h1><i class="icon icon-bullhorn"></i> <span class="clock">00:00:00</span></h1>
 			<nav>
-                <div class="buttons">
-					<a class="button small icon-tablet remote" href="#" onclick="return false;"></a>
-					<a class="button small icon-undo reset" href="#" title="Shortcut keys (ESC)" onclick="return false;"></a>
-					<a class="button small icon-text-width flipx" href="#" title="Shortcut key (X)" onclick="return false;"></a>
-					<a class="button small icon-text-height flipy" href="#" title="Shortcut keys (Y)" onclick="return false;"></a>
-					<a class="button icon-play play active" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;"></a>
+                                <div class="buttons">
+                                    <a class="button small icon-tablet remote" href="#" onclick="return false;"></a>
+                                    <a class="button small icon-undo reset" href="#" title="Shortcut keys (ESC)" onclick="return false;"></a>
+                                    <a class="button small icon-text-width flipx" href="#" title="Shortcut key (X)" onclick="return false;"></a>
+                                    <a class="button small icon-text-height flipy" href="#" title="Shortcut keys (Y)" onclick="return false;"></a>
+                                    <a class="button small icon-cloud-upload upload" href="#" title="Save text to cloud" onclick="return false;"></a>
+                                    <a class="button small icon-cloud-download download" href="#" title="Load text from cloud (L)" onclick="return false;"></a>
+                                    <a class="button icon-play play active" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;"></a>
 				</div>
                                 <div class="sliders spacing">
 					<label class="prompter_width_label">Prompter width <span>(100%)</span>:&nbsp; <div class="prompter_width slider" title="Shortcut keys (W, E)"></div></label><br>
@@ -53,10 +55,10 @@
 					<label class="font_size_label">Font Size <span>(60)</span>:&nbsp; <div class="font_size slider" title="Shortcut keys (F, G)"></div></label><br>
 					<label class="speed_label">Speed <span>(35)</span>:&nbsp; <div class="speed slider" title="Shortcut keys (LEFT, RIGHT)"></div></label>
 				</div>
-                <div class="colors">
-                    <input id="text-color-picker" class="color {hash:true,caps:true,valueElement:'text-color'}"><input type="hidden" id="text-color" value="#ffffff">
-                    <input id="background-color-picker" class="color {hash:true,caps:true,valueElement:'background-color'}"><input type="hidden" id="background-color" value="#141414">
-                </div>
+                                <div class="colors">
+                                    <input id="text-color-picker" class="color {hash:true,caps:true,valueElement:'text-color'}"><input type="hidden" id="text-color" value="#ffffff">
+                                    <input id="background-color-picker" class="color {hash:true,caps:true,valueElement:'background-color'}"><input type="hidden" id="background-color" value="#141414">
+                                </div>
 			</nav>
 		</header>
 		<article>
@@ -99,6 +101,6 @@
 
 		<script src="https://promptr.tv/remote/socket.io/socket.io.js"></script>
 		<script src="js/plugins.js?v=1.1.0"></script>
-		<script src="js/script.js?v=1.1.0"></script>
+		<script src="js/script.js?v=1.2"></script>
 	</body>
 </html>
