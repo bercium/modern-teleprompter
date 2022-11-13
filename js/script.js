@@ -279,6 +279,18 @@
                 $('.button.download').click(function() {
                     load_data();
 		});
+                
+                $('.button.showmarker').click(function() {
+                    if ($('.button.showmarker').hasClass("active")){
+                        $('.button.showmarker').removeClass("active");
+                        $('.overlay .top, .overlay .bottom, .marker').addClass("nomarker");
+                        $('.overlay .bottom, .overlay .top').css("height","20%");
+                    }else{
+                        $('.button.showmarker').addClass("active");
+                        $('.overlay .top, .overlay .bottom, .marker').removeClass("nomarker");
+                    }
+		});
+                
 
 		var currentRemote = config.get('remote-id');
 
@@ -444,17 +456,17 @@
 			'top': 'calc('+initMarkerPosition + '% - 20px)',
 		});
                 
-                $('.overlay .top').css({
-			'height': 'calc('+initMarkerPosition + '% - 90px)',
+                $('.overlay .top').not('.nomarker').css({
+			'height': 'calc('+initMarkerPosition + '% - 50px)',
 		});
-                $('.overlay .bottom').css({
-			'top': 'calc('+initMarkerPosition + '% + 90px)',
+                $('.overlay .bottom').not('.nomarker').css({
+			'height': 'calc(100% - '+initMarkerPosition + '% - 50px)',
 		});
                 
 		$('label.marker_position_label span').text('(' + $('.marker_position').slider('value') + ')');
 
 		if (save) {
-                        $('.marker, .overlay').fadeIn('slow');
+                        $('.marker, .overlay').not('.nomarker').fadeIn('slow');
 			config.set('teleprompter_marker_position', $('.speed').slider('value'));
 		}
 	}
@@ -677,7 +689,7 @@
 		$('.button.play').removeClass('icon-play').addClass('icon-pause');
 		//$('header h1, header nav').fadeTo('slow', 0.15);
                 $('header').fadeOut('fast');
-		$('.marker, .overlay').fadeIn('slow');
+		$('.marker, .overlay').not('.nomarker').fadeIn('slow');
 
 		timer.startTimer();
 

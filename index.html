@@ -17,7 +17,7 @@
 
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800,300' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/redmond/jquery-ui.css" />
-		<link rel="stylesheet" href="css/style.css?v=0.6.1">
+		<link rel="stylesheet" href="css/style.css?v=0.6.3">
 		<link rel="stylesheet" href="css/font-awesome.min.css">
 	</head>
 	<body id="gui">
@@ -39,6 +39,7 @@
 			<h1><i class="icon icon-bullhorn"></i> <span class="clock">00:00:00</span></h1>
 			<nav>
                                 <div class="buttons">
+                                    <a class="button small icon-chevron-right showmarker active" href="#" title="Show marker" onclick="return false;"></a>
                                     <a class="button small icon-tablet remote" href="#" onclick="return false;"></a>
                                     <a class="button small icon-undo reset" href="#" title="Shortcut keys (ESC)" onclick="return false;"></a>
                                     <a class="button small icon-text-width flipx" href="#" title="Shortcut key (X)" onclick="return false;"></a>
@@ -93,7 +94,7 @@
 				<br><br>
 				Thanks for Stopping by.
 			</div>
-			<i class="icon-play marker"></i>
+			<i class="icon-chevron-right marker"></i>
 		</article>
 		<footer>
 
@@ -101,6 +102,6 @@
 
 		<script src="https://promptr.tv/remote/socket.io/socket.io.js"></script>
 		<script src="js/plugins.js?v=1.1.0"></script>
-		<script src="js/script.js?v=1.2"></script>
+		<script src="js/script.js?v=1.2.5"></script>
 	</body>
 </html>
