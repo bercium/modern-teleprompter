@@ -17,7 +17,7 @@
 
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800,300' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/redmond/jquery-ui.css" />
-		<link rel="stylesheet" href="css/style.css?v=0.6.3">
+		<link rel="stylesheet" href="css/style.css?v=1.1.0">
 		<link rel="stylesheet" href="css/font-awesome.min.css">
 	</head>
 	<body id="gui">
@@ -36,12 +36,12 @@
 		</div>
 
 		<header>
-			<h1><i class="icon icon-bullhorn"></i> <span class="clock">00:00:00</span></h1>
 			<nav>
                                 <div class="buttons">
                                     <a class="button small icon-chevron-right showmarker active" href="#" title="Show marker" onclick="return false;"></a>
+                                    <a class="button small icon-time timer" href="#" title="Show timer" onclick="return false;"></a>
                                     <a class="button small icon-tablet remote" href="#" onclick="return false;"></a>
-                                    <a class="button small icon-undo reset" href="#" title="Shortcut keys (ESC)" onclick="return false;"></a>
+                                    <a class="button small icon-arrow-up reset" href="#" title="Shortcut keys (ESC)" onclick="return false;"></a>
                                     <a class="button small icon-text-width flipx" href="#" title="Shortcut key (X)" onclick="return false;"></a>
                                     <a class="button small icon-text-height flipy" href="#" title="Shortcut keys (Y)" onclick="return false;"></a>
                                     <a class="button small icon-cloud-upload upload" href="#" title="Save text to cloud" onclick="return false;"></a>
@@ -64,8 +64,8 @@
 		</header>
 		<article>
 			<div class="overlay">
-				<div class="top"></div>
-				<div class="bottom"></div>
+                            <div class="top"><div class="timer_container"><h1><i class="icon icon-time"></i> <span class="clock">00:00:00</span></h1></div></div>
+                            <div class="bottom"></div>
 			</div>
 			<div class="teleprompter" id="teleprompter" contenteditable>
 				Oh, hello there. I did not see you come in. I was to busy reading off this TelePrompter. It does some pretty cool things, for example:
@@ -102,6 +102,6 @@
 
 		<script src="https://promptr.tv/remote/socket.io/socket.io.js"></script>
 		<script src="js/plugins.js?v=1.1.0"></script>
-		<script src="js/script.js?v=1.2.5"></script>
+		<script src="js/script.js?v=1.2.10"></script>
 	</body>
 </html>

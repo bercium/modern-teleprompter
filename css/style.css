@@ -40,10 +40,10 @@ header *
 	-ms-user-select: none;
 	user-select: none;
 }
-header h1
+.timer_container
 {
 	font-weight: normal;
-	display: inline-block;
+	display: none;
 	width: 30%;
 	float: left;
 	z-index: 10;
@@ -51,7 +51,7 @@ header h1
 	text-indent: 30px;
 	color: #4297d7;
 }
-header h1 span.clock
+.timer_container h1 .span.clock
 {
 	color: #fff;
 	padding-left: 10px;
@@ -219,7 +219,7 @@ article .teleprompter.flipxy
 	/*background-color: #000;
 	background-color: rgba(0,0,0,0.4);*/
 	z-index: 10;
-        background:linear-gradient(to bottom, rgba(0,0,0,0.9) 70%, transparent 100%);
+        background:linear-gradient(to bottom, rgba(0,0,0,0.8) 70%, transparent 100%);
 }
 .overlay .bottom
 {
@@ -230,7 +230,7 @@ article .teleprompter.flipxy
 	width: 100%;
 	/*background-color: #000;
 	background-color: rgba(0,0,0,0.4);*/
-        background:linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.9) 30%);
+        background:linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 30%);
 	overflow: hidden;
 	z-index: 10;
 }
