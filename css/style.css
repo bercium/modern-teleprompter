@@ -1,5 +1,4 @@
-*
-{
+*{
 	padding: 0;
 	margin: 0;
 	outline: none;
@@ -9,14 +8,13 @@
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
-body
-{
+body{
 	background-color: #141414;
 	font-family: 'Open Sans', sans-serif;
 	color: #fff;
+        font-size: 14px;
 }
-body, html
-{
+body, html{
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
@@ -62,7 +60,7 @@ article .teleprompter p
 }
 article .teleprompter p:last-child
 {
-	border-bottom: 1px solid #4297d7;
+	border-bottom: 2px solid #4297d7;
 }
 article .teleprompter.flipx
 {
@@ -97,12 +95,17 @@ article .teleprompter.flipxy
 .marker
 {
 	position: fixed;
-	left: 0;
+	right: 0;
 	top: 213px;
 	color: #4297d7;
 	font-size: 40px;
 	display: none;
 	z-index: 100;
+        opacity: 70%;
+}
+.marker.icon-chevron-right{
+    left: 0;
+    right: auto;
 }
 .overlay
 {

@@ -78,10 +78,10 @@
         } else {
             clean_teleprompter();
         }
-        if (config.get('teleprompter_flip_x')) initFlipX = config.get('teleprompter_flip_x');
-        if (config.get('teleprompter_flip_y')) initFlipY = config.get('teleprompter_flip_y');
-        if (config.get('teleprompter_marker')) initMarker = config.get('teleprompter_marker');
-        if (config.get('teleprompter_timer')) initTimer = config.get('teleprompter_timer');
+        if (config.get('teleprompter_flip_x')) initFlipX = config.get('teleprompter_flip_x') == 'true';
+        if (config.get('teleprompter_flip_y')) initFlipY = config.get('teleprompter_flip_y') == 'true';
+        if (config.get('teleprompter_marker')) initMarker = config.get('teleprompter_marker') == 'true';
+        if (config.get('teleprompter_timer')) initTimer = config.get('teleprompter_timer') == 'true';
         
 
         // Listen for Key Presses
@@ -89,9 +89,7 @@
         $('body').on("keydown",navigate).on("mousedown",function(){dragable = true;}).on("mouseup",function(){dragable = false;});
 
         // Setup GUI
-        $('article').stop().animate({ scrollTop: 0 }, 100, 'linear', function () {
-            $('article').clearQueue();
-        });
+        $('article').stop().animate({ scrollTop: 0 }, 100, 'linear', function () { $('article').clearQueue(); });
         $('.marker, .overlay').fadeOut(0);
         $('article #teleprompter').css({'padding-bottom': Math.ceil($(window).height() - $('header').height()) + 'px' });
 
@@ -120,14 +118,14 @@
             if (dragable) markerPosition(true);
         });
 
-        $('.button.flipx').on("click", flipX(true) );
-        $('.button.flipy').on("click", flipY(true) );
+        $('.button.flipx').on("click", function(){flipX(true)} );
+        $('.button.flipy').on("click", function(){flipY(true)} );
         
         // when editing return to normal text
         $('#teleprompter').on("focusin",function(){ $('#teleprompter').removeClass("flipx").removeClass("flipy"); })
-                          .on("focusout",function(){ 
-                              if (initFlipX == 'true') $('#teleprompter').addClass("flipx"); 
-                              if (initFlipY == 'true') $('#teleprompter').addClass("flipy"); 
+                          .on("focusout",function(){
+                              if (initFlipX) $('#teleprompter').addClass("flipx");
+                              if (initFlipY) $('#teleprompter').addClass("flipy");
                           });
         
         // Listen for Reset Button Click
@@ -197,10 +195,10 @@
         speed(false);
         prompterWidth(false);
         markerPosition(false);
-        if (initFlipX == 'true') flipX(false);
-        if (initFlipY == 'true') flipY(false);
-        if (initMarker == 'false') toggleMarker(false);
-        if (initTimer == 'true') toggleTimer(false);
+        if (initFlipX) flipX(false);
+        if (initFlipY) flipY(false);
+        if (!initMarker) toggleMarker(false);
+        if (initTimer) toggleTimer(false);
 
     });
 
@@ -384,8 +382,7 @@
     function pageScroll(direction, offset) {
         var animate = 0;
 
-        if (!offset)
-            offset = 2;
+        if (!offset) offset = 2;
 
         if (!direction) {
             direction = 'down'
@@ -480,7 +477,7 @@
         }
         // Start Stop Scrolling
         else if (evt.keyCode == space || evt.keyCode == pause /* letter v - quieter key*/) {
-            $('.buttons .button.play').trigger('click');
+            $('.button.play').trigger('click');
         }
         // Decrease Speed with Left Arrow
         else if (evt.keyCode == left) {
@@ -558,6 +555,8 @@
         $('body').addClass('playing');
         $('.button.play').removeClass('icon-play').addClass('icon-pause');
         //$('header h1, header nav').fadeTo('slow', 0.15);
+        
+        
         $('header').fadeOut('fast');
         $('.marker, .overlay').not('.nomarker').fadeIn('slow');
 
