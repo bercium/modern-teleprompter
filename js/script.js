@@ -1,27 +1,30 @@
 (function ($) {
+    // default values
     var initPageSpeed = 35,
-            initFontBold = false,
-            initTextLock = false,
-            initFontSize = 60,
-            initContentWidth = 100,
-            initMarkerPosition = 30,
-            scrollDelay,
-            textColor = '#ffffff',
-            backgroundColor = '#141414',
-            socket,
-            remote,
-            initFlipX = false,
-            initFlipY = false,
-            initMarker = true,
-            initTimer = false,
-            timer = $('.clock').timer({
-        stopVal: 10000,
-        onChange: function (time) {
-            if (socket && remote) {
-                socket.emit('clientCommand', 'updateTime', time);
+        initFontSize = 60,
+        initPrompterWidth = 100,
+        initMarkerPosition = 30,
+        scrollDelay, //scrolling timer
+        textColor = '#ffffff',
+        backgroundColor = '#141414',
+        //socket,
+        //remote,
+        initFlipX = false,
+        initFlipY = false,
+        initMarker = true,
+        initTimer = false,
+        initFontBold = false,
+        initTextLock = false,   
+        initStartDelay = 0, // before we start how much delay
+        dragable = false,
+        timer = $('.clock').timer({
+            stopVal: 10000,
+            onChange: function (time) {
+                /*if (socket && remote) {
+                    socket.emit('clientCommand', 'updateTime', time);
+                }*/
             }
-        }
-    });
+        });
 
     /**
      * Config Wrapper to add Local Storage support while maintaining
@@ -50,77 +53,51 @@
             }
         }
     };
+    
+    
+    
 
-    window.onload = function () {
+    $(function(){
         // Check if we've been here before and made changes
-        if (config.get('teleprompter_font_size')) {
-            initFontSize = config.get('teleprompter_font_size');
-        }
-        if (config.get('teleprompter_speed')) {
-            initPageSpeed = config.get('teleprompter_speed');
-        }
-        if (config.get('teleprompter_prompter_width')) {
-            initContentWidth = config.get('teleprompter_prompter_width');
-        }
-        if (config.get('teleprompter_marker_position')) {
-            initMarkerPosition = config.get('teleprompter_marker_position');
-        }
-        if (config.get('teleprompter_text')) {
-            $('#teleprompter').html(config.get('teleprompter_text'));
-        }
+        if (config.get('teleprompter_font_size')) initFontSize = config.get('teleprompter_font_size');
+        if (config.get('teleprompter_speed')) initPageSpeed = config.get('teleprompter_speed');
+        if (config.get('teleprompter_prompter_width')) initPrompterWidth = config.get('teleprompter_prompter_width');
+        if (config.get('teleprompter_marker_position')) initMarkerPosition = config.get('teleprompter_marker_position');
+        if (config.get('teleprompter_text')) $('#teleprompter').html(config.get('teleprompter_text'));
+
         if (config.get('teleprompter_text_color')) {
             textColor = config.get('teleprompter_text_color');
             $('#text-color-picker').val(textColor);
-            $('#text-color-picker').css('background-color', textColor);
             $('#teleprompter').css('color', textColor);
+            $('#count_down').css('color', textColor);
         }
         if (config.get('teleprompter_background_color')) {
             backgroundColor = config.get('teleprompter_background_color');
             $('#background-color-picker').val(backgroundColor);
-            $('#background-color-picker').css('background-color', textColor);
             $('#teleprompter').css('background-color', backgroundColor);
         } else {
             clean_teleprompter();
         }
-        if (config.get('teleprompter_flip_x')) {
-            initFlipX = config.get('teleprompter_flip_x');
-        }
-        if (config.get('teleprompter_flip_y')) {
-            initFlipY = config.get('teleprompter_flip_y');
-        }
-        if (config.get('teleprompter_marker')) {
-            initMarker = config.get('teleprompter_marker');
-        }
-        if (config.get('teleprompter_timer')) {
-            initTimer = config.get('teleprompter_timer');
-        }
+        if (config.get('teleprompter_flip_x')) initFlipX = config.get('teleprompter_flip_x');
+        if (config.get('teleprompter_flip_y')) initFlipY = config.get('teleprompter_flip_y');
+        if (config.get('teleprompter_marker')) initMarker = config.get('teleprompter_marker');
+        if (config.get('teleprompter_timer')) initTimer = config.get('teleprompter_timer');
+        
 
         // Listen for Key Presses
-        $('#teleprompter').keyup(update_teleprompter);
-        $('body').keydown(navigate);
+        $('#teleprompter').on("keyup",update_teleprompter);
+        $('body').on("keydown",navigate).on("mousedown",function(){dragable = true;}).on("mouseup",function(){dragable = false;});
 
         // Setup GUI
-        $('article').stop().animate({
-            scrollTop: 0
-        }, 100, 'linear', function () {
+        $('article').stop().animate({ scrollTop: 0 }, 100, 'linear', function () {
             $('article').clearQueue();
         });
         $('.marker, .overlay').fadeOut(0);
-        $('article #teleprompter').css({
-            'padding-bottom': Math.ceil($(window).height() - $('header').height()) + 'px'
-        });
+        $('article #teleprompter').css({'padding-bottom': Math.ceil($(window).height() - $('header').height()) + 'px' });
 
         // Create Font Size Slider
-        $('#font_size').val(initFontSize).on("change", function () {
-            fontSize(true);
-        }).on("mousemove", function () {
-            fontSize(true);
-        });
-        $('#speed').val(initPageSpeed).on("change", function () {
-            speed(true);
-        }).on("mousemove", function () {
-            speed(true);
-        });
+        $('#font_size').val(initFontSize).on("change", function () { fontSize(true); }).on("mousemove", function () { if (dragable) fontSize(true); });
+        $('#speed').val(initPageSpeed).on("change", function () { speed(true); }).on("mousemove", function () { if (dragable) speed(true); });
 
         $('#font_bold').prop('checked', initFontBold).on("change", function () {
             if ($("#font_bold:checked").length == 1)
@@ -135,68 +112,26 @@
                 $('article #teleprompter').prop("contenteditable", true);
         });
 
-        $('#prompter_width').val(initContentWidth).on("change", function () {
-            prompterWidth(true);
-        }).on("mousemove", function () {
-            prompterWidth(true);
-        });
+        $('#prompter_width').val(initPrompterWidth).on("change", function () { prompterWidth(true); }).on("mousemove", function () { if (dragable) prompterWidth(true); });
         $('#marker_position').val(initMarkerPosition).on("change", function () {
             markerPosition(true);
-            if (!$('body').hasClass('playing'))
-                $('.marker, .overlay').fadeOut('slow');
+            if (!$('body').hasClass('playing')) $('.marker, .overlay').fadeOut('slow');
         }).on("mousemove", function () {
-            markerPosition(true);
+            if (dragable) markerPosition(true);
         });
 
-        //$('#teleprompter').on("focusin",function(){ $('#teleprompter').removeClass("flipx"); }).on("focusout",function(){ $('#teleprompter').addClass("flipx"); });
-
-
-        $('#text-color-picker').change(function () {
-            var color = $(this).val();
-            $('#teleprompter').css('color', color);
-            config.set('teleprompter_text_color', color);
-        });
-        $('#background-color-picker').change(function () {
-            var color = $(this).val();
-            $('#teleprompter').css('background-color', color);
-            config.set('teleprompter_background_color', color);
-        });
-
-        // Run initial configuration on sliders
-        fontSize(false);
-        speed(false);
-        prompterWidth(false);
-        markerPosition(false);
-        if (initFlipX == 'true')
-            flipX(false);
-        if (initFlipY == 'true')
-            flipY(false);
-        if (initMarker == 'false')
-            toggleMarker(false);
-        if (initTimer == 'true')
-            toggleTimer(false);
-
-        // Listen for Play Button Click
-        $('.button.play').click(function () {
-            if ($(this).hasClass('icon-play')) {
-                start_teleprompter();
-            } else {
-                stop_teleprompter();
-            }
-        });
-
-        // Listen for FlipX Button Click
-        $('.button.flipx').click(function () {
-            flipX(true);
-        });
-
-        // Listen for FlipY Button Click
-        $('.button.flipy').click(function () {
-            flipY(true);
-        });
-
+        $('.button.flipx').on("click", flipX(true) );
+        $('.button.flipy').on("click", flipY(true) );
+        
+        // when editing return to normal text
+        $('#teleprompter').on("focusin",function(){ $('#teleprompter').removeClass("flipx").removeClass("flipy"); })
+                          .on("focusout",function(){ 
+                              if (initFlipX == 'true') $('#teleprompter').addClass("flipx"); 
+                              if (initFlipY == 'true') $('#teleprompter').addClass("flipy"); 
+                          });
+        
         // Listen for Reset Button Click
-        $('.button.reset').click(function () {
+        $('.button.reset').on("click", function () {
             stop_teleprompter();
             resetTimer();
 
@@ -207,20 +142,42 @@
             });
         });
 
-        // Listen for Reset Button Click
-        $('.button.remote').click(function () {
-            if (!socket && !remote) {
-                remote_connect();
+        $('#text-color-picker').on("change",function () {
+            var color = $(this).val();
+            $('#teleprompter').css('color', color);
+            $('#count_down').css('color', color);
+            config.set('teleprompter_text_color', color);
+        });
+        $('#background-color-picker').on("change",function () {
+            var color = $(this).val();
+            $('#teleprompter').css('background-color', color);
+            config.set('teleprompter_background_color', color);
+        });
+        
+        // Listen for Play Button Click
+        $('.button.play').on("click",function () {
+            if ($(this).hasClass('icon-play')) {
+                
+                var counter = Number($("input[type='radio'][name='start-delay']:checked").val());
+                if (counter > 0){
+                    $("#count_down").addClass("active").html(counter);
+
+                    coutdown_timer = setInterval(() => {
+                      counter--;
+                      if (counter == 0){
+                            clearInterval(coutdown_timer);
+                            $("#count_down").removeClass("active").html("");
+                            start_teleprompter();
+                      }else $("#count_down").html(counter);
+
+                    }, 1000);
+                }  else start_teleprompter();
             } else {
-                $('.remote-modal').css('display', 'flex');
+                stop_teleprompter();
             }
         });
 
-        $('.close-modal').click(function () {
-            $('.remote-modal').hide();
-        });
-
-        $('.button.upload').click(function () {
+        $('.button.upload').on("click",function () {
             $('.button.upload').addClass("active");
             //setTimeout(function(){$('.button.upload').removeClass("active");}, 2000);
             $.post('cloud.php', // url
@@ -230,105 +187,23 @@
                     });
         });
 
-        $('.button.download').click(function () {
-            load_data();
-        });
-
-        $('.button.showmarker').click(function () {
-            toggleMarker(true);
-        });
-
-        $('.button.timer').click(function () {
-            toggleTimer(true);
-        });
+        $('.button.download').on("click",function () { load_data(); });
+        $('.button.showmarker').on("click",function () { toggleMarker(true); });
+        $('.button.timer').on("click",function () { toggleTimer(true); });
 
 
+        // Run initial configuration on sliders
+        fontSize(false);
+        speed(false);
+        prompterWidth(false);
+        markerPosition(false);
+        if (initFlipX == 'true') flipX(false);
+        if (initFlipY == 'true') flipY(false);
+        if (initMarker == 'false') toggleMarker(false);
+        if (initTimer == 'true') toggleTimer(false);
 
-        var currentRemote = config.get('remote-id');
+    });
 
-        if (currentRemote && currentRemote.length === 6) {
-            remote_connect(currentRemote);
-        }
-    };
-
-    function remote_connect(currentRemote) {
-        socket = io.connect('https://promptr.tv', {path: '/remote/socket.io'});
-        remote = (currentRemote) ? currentRemote : random_string();
-
-        socket.on('connect', function () {
-            socket.emit('connectToRemote', 'REMOTE_' + remote);
-            new QRCode(document.getElementById("qr-code"), 'https://promptr.tv/remote?id=' + remote);
-            $('.remote-id').text(remote);
-
-            if (!currentRemote) {
-                $('.remote-modal').css('display', 'flex');
-            }
-        });
-
-        socket.on('disconnect', function () {
-            $('.button.remote').removeClass('active');
-            config.set('remote-id', null);
-        });
-
-        socket.on('connectedToRemote', function () {
-            config.set('remote-id', remote);
-            $('.button.remote').addClass('active');
-        });
-
-        socket.on('remoteControl', function (command) {
-            switch (command) {
-                case 'reset':
-                    $('.button.reset').trigger('click');
-                    break;
-
-                case 'power':
-                    remote_disconnect();
-                    break;
-
-                case 'up':
-                    stop_teleprompter();
-                    pageScroll('up');
-                    break;
-
-                case 'slower':
-                    var speed = $('#speed').val();
-                    if (--speed < 1) {
-                        speed = 1;
-                    }
-                    $('#speed').val(speed);
-                    break;
-
-                case 'play':
-                    $('.button.play').trigger('click');
-                    break;
-
-                case 'faster':
-                    var speed = $('#speed').val();
-                    if (++speed > 50) {
-                        speed = 50;
-                    }
-                    $('#speed').val(speed);
-
-                    break;
-
-                case 'down':
-                    stop_teleprompter();
-                    pageScroll('down');
-                    break;
-
-                case 'hideModal':
-                    $('.remote-modal').hide();
-                    break;
-            }
-        });
-    }
-
-    function remote_disconnect() {
-        if (socket && remote) {
-            socket.disconnect();
-            remote = null;
-        }
-    }
 
     function random_string() {
         var chars = "3456789ABCDEFGHJKLMNPQRSTUVWXY";
@@ -379,12 +254,9 @@
 
     // Manage contetn width
     function prompterWidth(save) {
-        initContentWidth = Math.floor($('#prompter_width').val());
+        initPrompterWidth = Math.floor($('#prompter_width').val());
 
-        $('article #teleprompter').css({
-            'width': initContentWidth + '%',
-        });
-
+        $('article #teleprompter').css({ 'width': initPrompterWidth + '%', });
         $('label.prompter_width_label span').text('(' + $('#prompter_width').val() + '%)');
 
         if (save) {
@@ -395,9 +267,9 @@
     function resetTimer() {
         timer.resetTimer();
 
-        if (socket && remote) {
+        /*if (socket && remote) {
             socket.emit('clientCommand', 'updateTime', '00:00:00');
-        }
+        }*/
     }
 
     function flipX(save) {
@@ -575,23 +447,23 @@
     // Listen for Key Presses on Body
     function navigate(evt) {
         var space = 32,
-                pause = 80, // letter V for letter P use 80
-                escape = 27,
-                left = 37,
-                right = 39,
-                up = 38,
-                down = 40,
-                font_up = 71, // G char
-                font_down = 70, // F char
-                mirror_x = 88, // Y char
-                mirror_y = 89, // X char
-                width_up = 69, // E charr
-                width_down = 87, // W char
-                marker_up = 77, // M char
-                marker_down = 78, // N char
-                load_key = 76, // L char
-                speed_val = Number($('#speed').val()),
-                font_size = $('#font_size').val();
+            pause = 80, // letter V for letter P use 80
+            escape = 27,
+            left = 37,
+            right = 39,
+            up = 38,
+            down = 40,
+            font_up = 71, // G char
+            font_down = 70, // F char
+            mirror_x = 88, // Y char
+            mirror_y = 89, // X char
+            width_up = 69, // E charr
+            width_down = 87, // W char
+            marker_up = 77, // M char
+            marker_down = 78, // N char
+            load_key = 76, // L char
+            speed_val = Number($('#speed').val()),
+            font_size = Number($('#font_size').val());
 
         // Exit if we're inside an input field
         if (typeof evt.target.id == 'undefined' || evt.target.id == 'teleprompter') {
@@ -669,9 +541,7 @@
         // Marker position down
         else if (evt.keyCode == load_key) {
             load_data();
-
-        } else
-            return true;
+        } else return true;
 
         evt.preventDefault();
         evt.stopPropagation();
@@ -680,9 +550,9 @@
 
     // Start Teleprompter
     function start_teleprompter() {
-        if (socket && remote) {
+        /*if (socket && remote) {
             socket.emit('clientCommand', 'play');
-        }
+        }*/
 
         $('#teleprompter').attr('contenteditable', false);
         $('body').addClass('playing');
@@ -701,9 +571,9 @@
 
     // Stop Teleprompter
     function stop_teleprompter() {
-        if (socket && remote) {
+        /*if (socket && remote) {
             socket.emit('clientCommand', 'stop');
-        }
+        }*/
 
         clearTimeout(scrollDelay);
         $('#teleprompter').attr('contenteditable', true);

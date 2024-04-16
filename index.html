@@ -22,20 +22,7 @@
         <link rel="stylesheet" href="css/font-awesome.min.css">
     </head>
     <body id="gui">
-        <div class="remote-modal">
-            <a class="button icon-remove-circle close-modal" href="javascript:void(0)"></a>
-            <div class="modal-content">
-                <h1>Remote Control</h1>
-                <p>Access the Following URL from another device:</p>
-                <p class="remote-url">https://promptr.tv/remote</p>
-                <p>Enter this Remote ID:</p>
-                <p class="remote-id"></p>
-                <div id="qr-code"></div>
-                <p>Remote Control QR Code</p>
-            </div>
-            <div class="modal-overlay"></div>
-        </div>
-
+        <div id='count_down'></div>
         <header>
             <nav>
                 <div class="buttons">
@@ -79,16 +66,16 @@
                     </div>
 
 
-                    <input type="radio" class="btn-check" name="options-outlined" id="sec-0" autocomplete="off" checked>
+                    <input type="radio" class="btn-check" name="start-delay" id="sec-0" value='0' autocomplete="off" checked>
                     <label class="btn btn-outline-primary btn-sm" for="sec-0">0 sec</label>
 
-                    <input type="radio" class="btn-check" name="options-outlined" id="sec-3" autocomplete="off">
+                    <input type="radio" class="btn-check" name="start-delay" id="sec-3" value='3' autocomplete="off">
                     <label class="btn btn-outline-primary btn-sm" for="sec-3">3 sec</label>
                     
-                    <input type="radio" class="btn-check" name="options-outlined" id="sec-5" autocomplete="off">
+                    <input type="radio" class="btn-check" name="start-delay" id="sec-5" value='5' autocomplete="off">
                     <label class="btn btn-outline-primary btn-sm" for="sec-5">5 sec</label>
 
-                    <input type="radio" class="btn-check" name="options-outlined" id="sec-10" autocomplete="off">
+                    <input type="radio" class="btn-check" name="start-delay" id="sec-10" value='10' autocomplete="off">
                     <label class="btn btn-outline-primary btn-sm" for="sec-10">10 sec</label>                    
 
                 </div>
@@ -138,8 +125,6 @@
         <footer>
 
         </footer>
-
-        <script src="https://promptr.tv/remote/socket.io/socket.io.js"></script>
         
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

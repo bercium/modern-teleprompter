@@ -150,3 +150,32 @@ article .teleprompter.flipxy
     height: 20%;
     background:linear-gradient(to bottom, transparent 0%, #000 100%);
 }
+
+#count_down{
+  font-size:80px;
+  font-weight:bold;
+  width:100%;
+  height:100%;
+  position:fixed;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+#count_down.active{
+  display: flex;
+  animation-name:scale;
+  animation-duration:1s;
+  animation-iteration-count:infinite;
+}
+@keyframes scale{
+  from{
+    scale:1;
+    opacity:1;
+  }
+  to{
+    scale:3;
+    opacity:0;
+  }
+}
