@@ -98,13 +98,13 @@
         $('#speed').val(initPageSpeed).on("change", function () { speed(true); }).on("mousemove", function () { if (dragable) speed(true); });
 
         $('#font_bold').prop('checked', initFontBold).on("change", function () {
-            if ($("#font_bold:checked").length == 1)
+            if ($("#font_bold").is(":checked"))
                 $('article #teleprompter').css("font-weight", "bold");
             else
                 $('article #teleprompter').css("font-weight", "normal");
         });
         $('#text_lock').prop('checked', initTextLock).on("change", function () {
-            if ($("#text_lock:checked").length == 1)
+            if ($("#text_lock").is(":checked"))
                 $('article #teleprompter').prop("contenteditable", false);
             else
                 $('article #teleprompter').prop("contenteditable", true);
@@ -118,14 +118,22 @@
             if (dragable) markerPosition(true);
         });
 
-        $('.button.flipx').on("click", function(){flipX(true)} );
-        $('.button.flipy').on("click", function(){flipY(true)} );
+
+        $('#flipx').prop("checked",initFlipX).on("click", function(){flipX(true)} );
+        $('#flipy').prop("checked",initFlipY).on("click", function(){flipY(true)} );
+        
+        $('#marker_enabled').prop("checked",initMarker).on("click", function(){toggleMarker(true)} );
+        
+        $('#timer').prop("checked",initTimer).on("click",function () { toggleTimer(true); });
         
         // when editing return to normal text
-        $('#teleprompter').on("focusin",function(){ $('#teleprompter').removeClass("flipx").removeClass("flipy"); })
+        $('#teleprompter').on("focusin",function(){ $('#teleprompter').removeClass("flipx").removeClass("flipy").removeClass("flipxy"); })
                           .on("focusout",function(){
-                              if (initFlipX) $('#teleprompter').addClass("flipx");
-                              if (initFlipY) $('#teleprompter').addClass("flipy");
+                                if (initFlipY && initFlipY) $('#teleprompter').addClass("flipxy");
+                                else{
+                                    if (initFlipX) $('#teleprompter').addClass("flipx");
+                                    if (initFlipY) $('#teleprompter').addClass("flipy");
+                                }
                           });
         
         // Listen for Reset Button Click
@@ -153,7 +161,7 @@
         });
         
         // Listen for Play Button Click
-        $('.button.play').on("click",function () {
+        $('#start_prompter').on("click",function () {
             if ($(this).hasClass('icon-play')) {
                 
                 var counter = Number($("input[type='radio'][name='start-delay']:checked").val());
@@ -186,8 +194,7 @@
         });
 
         $('.button.download').on("click",function () { load_data(); });
-        $('.button.showmarker').on("click",function () { toggleMarker(true); });
-        $('.button.timer').on("click",function () { toggleTimer(true); });
+        //$('.button.showmarker').on("click",function () { toggleMarker(true); });
 
 
         // Run initial configuration on sliders
@@ -198,7 +205,7 @@
         if (initFlipX) flipX(false);
         if (initFlipY) flipY(false);
         if (!initMarker) toggleMarker(false);
-        if (initTimer) toggleTimer(false);
+        toggleTimer(false);
 
     });
 
@@ -273,17 +280,15 @@
     function flipX(save) {
         resetTimer();
 
-        if ($('#teleprompter').hasClass('flipxy')) {
-            $('#teleprompter').removeClass('flipxy').addClass('flipy');
-        } else
-            $('#teleprompter').toggleClass('flipx');
+        if ($('#teleprompter').hasClass('flipxy')) $('#teleprompter').removeClass('flipxy').addClass('flipy');
+        else $('#teleprompter').toggleClass('flipx');
 
         if ($('#teleprompter').hasClass('flipx') && $('#teleprompter').hasClass('flipy')) {
             $('#teleprompter').removeClass('flipx').removeClass('flipy').addClass('flipxy');
         }
 
-        $('.button.flipx').toggleClass("active");
-        initFlipX = $('.button.flipx').hasClass("active");
+        //$('.button.flipx').toggleClass("active");
+        initFlipX = $('#flipx').is(":checked");
 
         if (save) {
             config.set('teleprompter_flip_x', initFlipX);
@@ -293,17 +298,15 @@
     function flipY(save) {
         resetTimer();
 
-        if ($('#teleprompter').hasClass('flipxy')) {
-            $('#teleprompter').removeClass('flipxy').addClass('flipx');
-        } else
-            $('#teleprompter').toggleClass('flipy');
+        if ($('#teleprompter').hasClass('flipxy')) $('#teleprompter').removeClass('flipxy').addClass('flipx');
+        else $('#teleprompter').toggleClass('flipy');
 
         if ($('#teleprompter').hasClass('flipx') && $('#teleprompter').hasClass('flipy')) {
             $('#teleprompter').removeClass('flipx').removeClass('flipy').addClass('flipxy');
         }
 
-        $('.button.flipy').toggleClass("active");
-        initFlipY = $('.button.flipy').hasClass("active");
+        //$('.button.flipy').toggleClass("active");
+        initFlipY = $('#flipy').is(":checked");
 
         if ($('#teleprompter').hasClass('flipy')) {
             $('article').stop().animate({
@@ -325,16 +328,18 @@
 
 
     function toggleMarker(save) {
-        if ($('.button.showmarker').hasClass("active")) {
-            $('.button.showmarker').removeClass("active");
+        if (!$('#marker_enabled').is(":checked")) {
+            //$('.button.showmarker').removeClass("active");
             $('.overlay .top, .overlay .bottom, .marker').addClass("nomarker");
             $('.overlay .bottom, .overlay .top').css("height", "20%");
+            $('#marker_position').prop("disabled",true);
         } else {
-            $('.button.showmarker').addClass("active");
+            //$('.button.showmarker').addClass("active");
             $('.overlay .top, .overlay .bottom, .marker').removeClass("nomarker");
+            $('#marker_position').prop("disabled",false);
             markerPosition(false);
         }
-        initMarker = $('.button.showmarker').hasClass("active");
+        initMarker = $('#marker_enabled').is(":checked");
 
         if (save) {
             config.set('teleprompter_marker', initMarker);
@@ -342,12 +347,12 @@
     }
 
     function toggleTimer(save) {
-        if ($('.button.timer').hasClass("active")) {
-            $('.button.timer').removeClass("active");
+        if ($('#timer').is(":checked")) {
+            $('.timer_container').show();
         } else {
-            $('.button.timer').addClass("active");
+            $('.timer_container').hide();
         }
-        initTimer = $('.button.timer').hasClass("active");
+        initTimer = $('#timer').is(":checked");
 
         if (save) {
             config.set('teleprompter_timer', initTimer);
@@ -369,7 +374,7 @@
             'height': 'calc(100% - ' + initMarkerPosition + '% - 50px)',
         });
 
-        $('label.marker_position_label span').text('(' + $('#marker_position').val() + ')');
+        $('label.marker_position_label span').text('(' + $('#marker_position').val() + '%)');
 
         if (save) {
             $('.marker, .overlay').not('.nomarker').fadeIn('slow');
@@ -477,7 +482,7 @@
         }
         // Start Stop Scrolling
         else if (evt.keyCode == space || evt.keyCode == pause /* letter v - quieter key*/) {
-            $('.button.play').trigger('click');
+            $('start_prompter').trigger('click');
         }
         // Decrease Speed with Left Arrow
         else if (evt.keyCode == left) {
@@ -509,11 +514,11 @@
         }
         // Flip text on X axis
         else if (evt.keyCode == mirror_x) {
-            $('.button.flipx').trigger("click");
+            flipX(true);
         }
         // Flip text on y axis
         else if (evt.keyCode == mirror_y) {
-            $('.button.flipy').trigger("click");
+            flipY(true)
         }
         // Prompter width up
         else if (evt.keyCode == width_up) {
@@ -553,15 +558,15 @@
 
         $('#teleprompter').attr('contenteditable', false);
         $('body').addClass('playing');
-        $('.button.play').removeClass('icon-play').addClass('icon-pause');
+        $('start_prompter').removeClass('icon-play').addClass('icon-pause');
         //$('header h1, header nav').fadeTo('slow', 0.15);
         
         
         $('header').fadeOut('fast');
         $('.marker, .overlay').not('.nomarker').fadeIn('slow');
 
-        if ($('.button.timer').hasClass("active")) {
-            $('.timer_container').fadeIn('fast');
+        if ($('#timer').is(":checked")) {
+            
             timer.startTimer();
         }
 
@@ -578,12 +583,12 @@
         $('#teleprompter').attr('contenteditable', true);
         //$('header h1, header nav').fadeTo('slow', 1);
         $('header').fadeIn('fast');
-        $('.button.play').removeClass('icon-pause').addClass('icon-play');
+        $('start_prompter').removeClass('icon-pause').addClass('icon-play');
         $('.marker, .overlay').fadeOut('slow');
         $('body').removeClass('playing');
 
-        if ($('.button.timer').hasClass("active")) {
-            $('.timer_container').fadeOut('fast');
+        if ($('#timer').is(":checked")) {
+           
             timer.stopTimer();
         }
 
