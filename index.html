@@ -34,12 +34,15 @@
 
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body p-0">
+                <div class="offcanvas-body p-0 ">
+                    
+                    <div class="text-secondary " style="position: absolute; bottom: 5px; right:10px; font-size: 0.7em; "><a href="#" class="text-decoration-none link-secondary">2024 © Ziga Berce</a></div>
+                    
                     <div class="accordion accordion-flush" id="afMenu">
                         <div class="accordion-item">
                             <h2 class="accordion-header ">
                                 <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#flush-1" aria-expanded="true" aria-controls="flush-1">
-                                    <i class="bi bi-pip me-2"></i>Prompt settings
+                                    <i class="bi bi-pip me-2"></i>Teleprompter settings
                                 </button>
                             </h2>
                             <div id="flush-1" class="accordion-collapse collapse show">
@@ -75,7 +78,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-2" aria-expanded="false" aria-controls="flush-2">
-                                    <i class="bi bi-palette me-2"></i>Legibility
+                                    <i class="bi bi-palette me-2"></i>Content legibility
                                 </button>
                             </h2>
                             <div id="flush-2" class="accordion-collapse collapse">
@@ -114,7 +117,7 @@
                                     <div class="mb-2">
                                         <div class="form-check form-switch">
                                             <input id="marker_enabled" class="form-check-input" type="checkbox" role="switch" title="Show reading marker" >
-                                            <label class="form-check-label marker_position_label " for="marker_enable">Reading marker position <span>(35%)</span></label>
+                                            <label class="form-check-label marker_position_label " for="marker_enabled">Reading marker position <span>(35%)</span></label>
                                         </div>
                                         <input type="range" class="form-range" id="marker_position" min="10" max="90" title="Shortcut keys (N, M)">
                                     </div>
@@ -163,26 +166,22 @@
                                     <div class="tab-content my-3" id="myTabContent">
                                         <div class="tab-pane fade show active" id="controller-tab-pane" role="tabpanel" aria-labelledby="controller-tab" tabindex="0">
                                             <div class="form-floating mb-3">
-                                                <input type="text" class="form-control form-control-sm" id="upload_code" value="XXX-XXX-XXXX" disabled>
-                                                <label for="upload_code">Remote code</label>
+                                                <input type="text" class="form-control" id="upload_code" value="XXX-XXX-XXXX" disabled>
+                                                <label for="upload_code">Cloud code</label>
                                             </div>
-                                            <div class="form-floating mb-3">
-                                                <input type="password" class="form-control form-control-sm" id="upload_password" placeholder="Password">
-                                                <label for="upload_password">Password</label>
-                                            </div>
+                                            
                                             <button id="cloud_upload"  type="button" class="btn btn-primary col-12"><i class="bi bi-cloud-arrow-up me-2"></i>Save to cloud</button>
                                         </div>
 
                                         <div class="tab-pane fade" id="viewer-tab-pane" role="tabpanel" aria-labelledby="viewer-tab" tabindex="0">
                                             <div class="form-floating mb-3">
-                                                <input type="text" class="form-control form-control-sm" id="download_code" placeholder="XXX-XXX-XXXX">
-                                                <label for="download_code">Remote code</label>
+                                                <input type="text" class="form-control" id="download_code" placeholder="XXX-XXX-XXXX">
+                                                <label for="download_code">Cloud code</label>
                                             </div>
-                                            <div class="form-floating mb-3">
-                                                <input type="password" class="form-control form-control-sm" id="download_password" placeholder="Password">
-                                                <label for="download_password">Password</label>
+                                            <div class="d-grid gap-2 d-md-flex">
+                                                <button id="cloud_download" type="button" class="btn btn-primary col-6" title="Load text from cloud (L)"><i class="bi bi-sliders2-vertical me-2"></i>Load Settings </button>
+                                                <button id="cloud_download" type="button" class="btn btn-primary col-6" title="Load text from cloud (L)"><i class="bi bi-body-text me-2"></i>Load Text</button>
                                             </div>
-                                            <button id="cloud_download" type="button" class="btn btn-primary col-12" title="Load text from cloud (L)"><i class="bi bi-cloud-arrow-down me-2"></i>Load from cloud</button>
                                         </div>
                                     </div>
 
@@ -190,15 +189,15 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </aside>
         <article>
             <div class="overlay">
-                <a class="text-decoration-none" id="start_prompter" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;" ><i class="bi bi-play-circle play"></i> Start</a>
+                
                 <div class="top">
-                    <div class="timer_container"><h1><i class="icon icon-time"></i> <span class="clock">00:00:00</span></h1></div>
+                    <a class="text-decoration-none" id="start_prompter" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;" ><i class="bi bi-pause-circle play"></i></a>
+                    <div class="timer_container"><h1><i class="bi bi-clock-history"></i> <span class="clock">00:00:00</span></h1></div>
                     <div style="float:right; margin-right:10px;"><a class="button icon-play play active" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;"></a></div>
                 </div>
                 <div class="bottom"></div>

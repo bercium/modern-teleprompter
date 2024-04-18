@@ -78,7 +78,7 @@
         
         if (config.get('teleprompter_start_delay')) initStartDelay = Number(config.get('teleprompter_start_delay'));
         if (config.get('teleprompter_remote_code')) initRemoteCode = config.get('teleprompter_remote_code');
-        else initRemoteCode = random_string();
+        else config.set('teleprompter_remote_code', initRemoteCode);
         
         if (config.get('teleprompter_text')) $('#teleprompter').html(config.get('teleprompter_text'));
         
@@ -104,7 +104,11 @@
         $("input[name='start_delay']").on("change",function () { startDelay(); });
         $("#upload_code").val(initRemoteCode);
         
-        $('#teleprompter').on("keyup",function () { update_teleprompter(); }); // teleprompter change
+        // teleprompter actions, editing and focus changes
+        $('#teleprompter').on("keyup",function () { update_teleprompter(); })
+                          .on("focusin",function(){ focus_teleprompter(true) })
+                          .on("focusout",function(){ focus_teleprompter(false); })
+                          .bind("paste", function(e){ paste_clean_text(e); } );
         
         
         // Listen for actions and button clicks
@@ -119,22 +123,9 @@
         $('#cloud_download').on("click",function () { cloud_load_data(); });
         
 
-
-        // Setup GUI
-
-
+        // set initial UI
         
-        // when editing return to normal text
-        $('#teleprompter').on("focusin",function(){ $('#teleprompter').removeClass("flipx").removeClass("flipy").removeClass("flipxy"); })
-                          .on("focusout",function(){
-                                if (initFlipY && initFlipY) $('#teleprompter').addClass("flipxy");
-                                else{
-                                    if (initFlipX) $('#teleprompter').addClass("flipx");
-                                    if (initFlipY) $('#teleprompter').addClass("flipy");
-                                }
-                          });
         
-       
 
 
 
@@ -181,6 +172,7 @@
     }
     
     function fontBold(){
+        
         if ($("#font_bold").is(":checked"))
             $('#teleprompter').css("font-weight", "bold");
         else
@@ -647,4 +639,22 @@
 
         $('#teleprompter').html(text);
     }
+    
+    function focus_teleprompter(isFocused) {
+        if (isFocused) $('#teleprompter').removeClass("flipx").removeClass("flipy").removeClass("flipxy");
+        else{
+            if (initFlipY && initFlipY) $('#teleprompter').addClass("flipxy");
+                else{
+                if (initFlipX) $('#teleprompter').addClass("flipx");
+                if (initFlipY) $('#teleprompter').addClass("flipy");
+            }
+        }
+    }
+    
+    function paste_clean_text(e){
+        e.preventDefault();
+        var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+        document.execCommand("insertHTML", false, text);
+    }
+    
 })(jQuery);
