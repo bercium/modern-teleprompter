@@ -4,19 +4,19 @@
         initFontSize = 60,
         initPrompterWidth = 100,
         initMarkerPosition = 30,
-        scrollDelay, //scrolling timer
-        textColor = '#ffffff',
-        backgroundColor = '#141414',
-        //socket,
-        //remote,
+        initTextColor = '#ffffff',
+        initBackgroundColor = '#141414',
         initFlipX = false,
         initFlipY = false,
         initMarker = true,
-        initTimer = false,
+        initReadingTimer = false,
         initFontBold = false,
-        initTextLock = false,   
+        initTextLock = false,
         initStartDelay = 0, // before we start how much delay
+        initRemoteCode = '',
+        
         dragable = false,
+        scrollDelay, //scrolling timer        
         timer = $('.clock').timer({
             stopVal: 10000,
             onChange: function (time) {
@@ -55,76 +55,72 @@
     };
     
     
-    
 
     $(function(){
-        // Check if we've been here before and made changes
-        if (config.get('teleprompter_font_size')) initFontSize = config.get('teleprompter_font_size');
-        if (config.get('teleprompter_speed')) initPageSpeed = config.get('teleprompter_speed');
-        if (config.get('teleprompter_prompter_width')) initPrompterWidth = config.get('teleprompter_prompter_width');
-        if (config.get('teleprompter_marker_position')) initMarkerPosition = config.get('teleprompter_marker_position');
-        if (config.get('teleprompter_text')) $('#teleprompter').html(config.get('teleprompter_text'));
-
-        if (config.get('teleprompter_text_color')) {
-            textColor = config.get('teleprompter_text_color');
-            $('#text-color-picker').val(textColor);
-            $('#teleprompter').css('color', textColor);
-            $('#count_down').css('color', textColor);
-        }
-        if (config.get('teleprompter_background_color')) {
-            backgroundColor = config.get('teleprompter_background_color');
-            $('#background-color-picker').val(backgroundColor);
-            $('#teleprompter').css('background-color', backgroundColor);
-        } else {
-            clean_teleprompter();
-        }
+        
+        // Load saved values
+        if (config.get('teleprompter_speed')) initPageSpeed = Number(config.get('teleprompter_speed'));
+        if (config.get('teleprompter_font_size')) initFontSize = Number(config.get('teleprompter_font_size'));
+        if (config.get('teleprompter_prompter_width')) initPrompterWidth = Number(config.get('teleprompter_prompter_width'));
+        if (config.get('teleprompter_marker_position')) initMarkerPosition = Number(config.get('teleprompter_marker_position'));
+                
+        if (config.get('teleprompter_text_color')) initTextColor = config.get('teleprompter_text_color');
+        if (config.get('teleprompter_background_color')) initBackgroundColor = config.get('teleprompter_background_color');
+        
         if (config.get('teleprompter_flip_x')) initFlipX = config.get('teleprompter_flip_x') == 'true';
         if (config.get('teleprompter_flip_y')) initFlipY = config.get('teleprompter_flip_y') == 'true';
         if (config.get('teleprompter_marker')) initMarker = config.get('teleprompter_marker') == 'true';
-        if (config.get('teleprompter_timer')) initTimer = config.get('teleprompter_timer') == 'true';
-        
+        if (config.get('teleprompter_reading_timer')) initReadingTimer = config.get('teleprompter_reading_timer') == 'true';
 
-        // Listen for Key Presses
+        if (config.get('teleprompter_font_bold')) initFontBold = config.get('teleprompter_font_bold') == 'true';
+        if (config.get('teleprompter_text_lock')) initTextLock = config.get('teleprompter_text_lock') == 'true';
+        
+        if (config.get('teleprompter_start_delay')) initStartDelay = Number(config.get('teleprompter_start_delay'));
+        if (config.get('teleprompter_remote_code')) initRemoteCode = config.get('teleprompter_remote_code');
+        else initRemoteCode = random_string();
+        
+        if (config.get('teleprompter_text')) $('#teleprompter').html(config.get('teleprompter_text'));
+        
+        
+        // set values and set actions
+        $('#speed').val(initPageSpeed).on("change", function () { promptSpeed(true); }).on("mousemove", function () { if (dragable) promptSpeed(true); });        
+        $('#font_size').val(initFontSize).on("change", function () { fontSize(true); }).on("mousemove", function () { if (dragable) fontSize(true); });
+        $('#prompter_width').val(initPrompterWidth).on("change", function () { prompterWidth(true); }).on("mousemove", function () { if (dragable) prompterWidth(true); });
+        $('#marker_position').val(initMarkerPosition).on("change", function () { markerPosition(true); }).on("mousemove", function () { if (dragable) markerPosition(true); });
+        
+        $('#text_color_picker').val(initTextColor).on("change",function () { textColor(); });
+        $('#background_color_picker').val(initBackgroundColor).on("change",function () { backgroundColor(); });
+        
+        $('#flipx').prop("checked",initFlipX).on("change", function(){flipX(true)} );
+        $('#flipy').prop("checked",initFlipY).on("change", function(){flipY(true)} );
+        $('#marker_enabled').prop("checked",initMarker).on("change", function(){toggleMarker(true)} );
+        $('#reading_timer').prop("checked",initReadingTimer).on("change",function () { toggleTimer(true); });
+                
+        $('#font_bold').prop('checked', initFontBold).on("change", function () { fontBold(); });
+        $('#text_lock').prop('checked', initTextLock).on("change", function () { textLock() });
+        
+        $("input[name='start_delay'][value="+initStartDelay+"]").prop("checked",true).on("change",function () { startDelay(); });
+        $("input[name='start_delay']").on("change",function () { startDelay(); });
+        $("#upload_code").val(initRemoteCode);
+        
+        // teleprompter change
         $('#teleprompter').on("keyup",update_teleprompter);
-        $('body').on("keydown",navigate).on("mousedown",function(){dragable = true;}).on("mouseup",function(){dragable = false;});
+        $('body').on("keydown",keyShortcuts).on("mousedown",function(){dragable = true;}).on("mouseup",function(){dragable = false;});
+        
+        
+        // Listen for Key Presses
+        
 
         // Setup GUI
         $('article').stop().animate({ scrollTop: 0 }, 100, 'linear', function () { $('article').clearQueue(); });
-        $('.marker, .overlay').fadeOut(0);
-        $('article #teleprompter').css({'padding-bottom': Math.ceil($(window).height() - $('header').height()) + 'px' });
+
+
+        //$('article #teleprompter').css({'padding-bottom': Math.ceil($(window).height() - $('header').height()) + 'px' });
 
         // Create Font Size Slider
-        $('#font_size').val(initFontSize).on("change", function () { fontSize(true); }).on("mousemove", function () { if (dragable) fontSize(true); });
-        $('#speed').val(initPageSpeed).on("change", function () { speed(true); }).on("mousemove", function () { if (dragable) speed(true); });
-
-        $('#font_bold').prop('checked', initFontBold).on("change", function () {
-            if ($("#font_bold").is(":checked"))
-                $('article #teleprompter').css("font-weight", "bold");
-            else
-                $('article #teleprompter').css("font-weight", "normal");
-        });
-        $('#text_lock').prop('checked', initTextLock).on("change", function () {
-            if ($("#text_lock").is(":checked"))
-                $('article #teleprompter').prop("contenteditable", false);
-            else
-                $('article #teleprompter').prop("contenteditable", true);
-        });
-
-        $('#prompter_width').val(initPrompterWidth).on("change", function () { prompterWidth(true); }).on("mousemove", function () { if (dragable) prompterWidth(true); });
-        $('#marker_position').val(initMarkerPosition).on("change", function () {
-            markerPosition(true);
-            if (!$('body').hasClass('playing')) $('.marker, .overlay').fadeOut('slow');
-        }).on("mousemove", function () {
-            if (dragable) markerPosition(true);
-        });
 
 
-        $('#flipx').prop("checked",initFlipX).on("click", function(){flipX(true)} );
-        $('#flipy').prop("checked",initFlipY).on("click", function(){flipY(true)} );
-        
-        $('#marker_enabled').prop("checked",initMarker).on("click", function(){toggleMarker(true)} );
-        
-        $('#timer').prop("checked",initTimer).on("click",function () { toggleTimer(true); });
+
         
         // when editing return to normal text
         $('#teleprompter').on("focusin",function(){ $('#teleprompter').removeClass("flipx").removeClass("flipy").removeClass("flipxy"); })
@@ -148,23 +144,13 @@
             });
         });
 
-        $('#text-color-picker').on("change",function () {
-            var color = $(this).val();
-            $('#teleprompter').css('color', color);
-            $('#count_down').css('color', color);
-            config.set('teleprompter_text_color', color);
-        });
-        $('#background-color-picker').on("change",function () {
-            var color = $(this).val();
-            $('#teleprompter').css('background-color', color);
-            config.set('teleprompter_background_color', color);
-        });
+
         
         // Listen for Play Button Click
         $('#start_prompter').on("click",function () {
             if ($(this).hasClass('icon-play')) {
                 
-                var counter = Number($("input[type='radio'][name='start-delay']:checked").val());
+                var counter = Number($("input[name='start_delay']:checked").val());
                 if (counter > 0){
                     $("#count_down").addClass("active").html(counter);
 
@@ -183,23 +169,38 @@
             }
         });
 
-        $('.button.upload').on("click",function () {
-            $('.button.upload').addClass("active");
+        $('#cloud_upload').on("click",function () {
+            $('#cloud_upload i').addClass("bi-cloud-upload-fill").removeClass("bi-cloud-arrow-up");
             //setTimeout(function(){$('.button.upload').removeClass("active");}, 2000);
             $.post('cloud.php', // url
                     {text: $("#teleprompter").html()}, // data to be submit
                     function (data, status, jqXHR) {// success callback
-                        $('.button.upload').removeClass("active");
+                       $('#cloud_upload i').addClass("bi-cloud-arrow-up").removeClass("bi-cloud-upload-fill");
                     });
         });
 
-        $('.button.download').on("click",function () { load_data(); });
+        $('#cloud_download').on("click",function () { load_data(); });
         //$('.button.showmarker').on("click",function () { toggleMarker(true); });
 
 
+        if (config.get('teleprompter_text_color')) {
+            initTextColor = config.get('teleprompter_text_color');
+            $('#text_color_picker').val(initTextColor);
+            $('#teleprompter').css('color', initTextColor);
+            $('#count_down').css('color', initTextColor);
+        }
+        if (config.get('teleprompter_background_color')) {
+            initBackgroundColor = config.get('teleprompter_background_color');
+            $('#background_color_picker').val(initBackgroundColor);
+            $('#teleprompter').css('background-color', initBackgroundColor);
+            $('article').css('background-color', initBackgroundColor);
+        } else {
+            clean_teleprompter();
+        }
+
         // Run initial configuration on sliders
         fontSize(false);
-        speed(false);
+        promptSpeed(false);
         prompterWidth(false);
         markerPosition(false);
         if (initFlipX) flipX(false);
@@ -211,17 +212,56 @@
 
 
     function random_string() {
-        var chars = "3456789ABCDEFGHJKLMNPQRSTUVWXY";
-        var string_length = 6;
+        var chars = "123456789ABCDEFGHIJKLMNOPQRSTUVZWXY";
+        var string_length = 10;
         var randomstring = '';
 
         for (var i = 0; i < string_length; i++) {
             var rnum = Math.floor(Math.random() * chars.length);
             randomstring += chars.substring(rnum, rnum + 1);
+            if (i == 2 || i == 5) randomstring += "-";
         }
 
         return randomstring;
     }
+    
+    function fontBold(){
+        if ($("#font_bold").is(":checked"))
+            $('#teleprompter').css("font-weight", "bold");
+        else
+            $('#teleprompter').css("font-weight", "normal");
+        config.set('teleprompter_font_bold',$("#font_bold").is(":checked"));
+    }
+    
+    function textLock(){
+        if ($("#text_lock").is(":checked"))
+            $('#teleprompter').prop("contenteditable", false);
+        else
+            $('#teleprompter').prop("contenteditable", true);
+        
+        config.set('teleprompter_text_lock',$("#text_lock").is(":checked"));
+    }
+    
+    function textColor() {
+        var color = $(this).val();
+            $('#teleprompter').css('color', color);
+            $('#count_down').css('color', color);
+            config.set('teleprompter_text_color', color);
+    }
+    
+    function backgroundColor(){
+        var color = $(this).val();
+        $('#teleprompter').css('background-color', color);
+        $('article').css('background-color', color);
+        config.set('teleprompter_background_color', color);
+
+    }
+    
+    function startDelay() {
+        initStartDelay = Number($("input[name='start_delay']:checked").val());
+        config.set('teleprompter_start_delay',initStartDelay);
+    }
+    
 
     // Manage Font Size Change
     function fontSize(save) {
@@ -230,7 +270,7 @@
         $('article #teleprompter').css({
             'font-size': initFontSize + 'px',
             'line-height': Math.ceil(initFontSize * 1.5) + 'px',
-            'padding-bottom': Math.ceil($(window).height() - $('header').height()) + 'px'
+            //'padding-bottom': Math.ceil($(window).height() - $('header').height()) + 'px'
         });
 
         $('article #teleprompter p').css({
@@ -246,7 +286,7 @@
     }
 
     // Manage Speed Change
-    function speed(save) {
+    function promptSpeed(save) {
         var speed = $('#speed').val();
         initPageSpeed = Math.floor(50 - speed);
         $('label.speed_label span').text('(' + speed + ')');
@@ -347,15 +387,15 @@
     }
 
     function toggleTimer(save) {
-        if ($('#timer').is(":checked")) {
+        if ($('#reading_timer').is(":checked")) {
             $('.timer_container').show();
         } else {
             $('.timer_container').hide();
         }
-        initTimer = $('#timer').is(":checked");
+        initReadingTimer = $('#reading_timer').is(":checked");
 
         if (save) {
-            config.set('teleprompter_timer', initTimer);
+            config.set('teleprompter_reading_timer', initReadingTimer);
         }
     }
 
@@ -378,7 +418,7 @@
 
         if (save) {
             $('.marker, .overlay').not('.nomarker').fadeIn('slow');
-            config.set('teleprompter_marker_position', $('#speed').val());
+            config.set('teleprompter_marker_position', $('#marker_position').val());
         }
     }
 
@@ -438,16 +478,16 @@
     }
 
     function load_data() {
-        $('.button.download').addClass("active");
+        $('#cloud_download i').addClass("bi-cloud-download-fill").removeClass("bi-cloud-arrow-down");
         $.get('cloud.php', // url
                 function (data, textStatus, jqXHR) {  // success callback
                     $("#teleprompter").html(data);
-                    $('.button.download').removeClass("active");
+                    $('#cloud_download i').addClass("bi-cloud-arrow-down").removeClass("bi-cloud-download-fill");
                 });
     }
 
     // Listen for Key Presses on Body
-    function navigate(evt) {
+    function keyShortcuts(evt) {
         var space = 32,
             pause = 80, // letter V for letter P use 80
             escape = 27,
@@ -468,7 +508,7 @@
             font_size = Number($('#font_size').val());
 
         // Exit if we're inside an input field
-        if (typeof evt.target.id == 'undefined' || evt.target.id == 'teleprompter') {
+        if (typeof evt.target.id == 'undefined' || evt.target.id == 'teleprompter' ||  $(evt.target).is("input")) {
             return;
         } else if (typeof evt.target.id == 'undefined' || evt.target.id != 'gui') {
             evt.preventDefault();
@@ -487,12 +527,12 @@
         // Decrease Speed with Left Arrow
         else if (evt.keyCode == left) {
             $('#speed').val(speed_val - 2);
-            speed(true);
+            promptSpeed(true);
         }
         // Increase Speed with Right Arrow
         else if (evt.keyCode == right) {
             $('#speed').val(speed_val + 2);
-            speed(true);
+            promptSpeed(true);
         }
         // Decrease Font Size with Minus
         else if (evt.keyCode == font_down) {
@@ -562,10 +602,11 @@
         //$('header h1, header nav').fadeTo('slow', 0.15);
         
         
-        $('header').fadeOut('fast');
+        //$('header').fadeOut('fast');
+        $('#offcanvasResponsive').removeClass('show');
         $('.marker, .overlay').not('.nomarker').fadeIn('slow');
 
-        if ($('#timer').is(":checked")) {
+        if ($('#reading_timer').is(":checked")) {
             
             timer.startTimer();
         }
@@ -582,12 +623,13 @@
         clearTimeout(scrollDelay);
         $('#teleprompter').attr('contenteditable', true);
         //$('header h1, header nav').fadeTo('slow', 1);
-        $('header').fadeIn('fast');
+        //$('header').fadeIn('fast');
+        $('#offcanvasResponsive').addClass('show');
         $('start_prompter').removeClass('icon-pause').addClass('icon-play');
         $('.marker, .overlay').fadeOut('slow');
         $('body').removeClass('playing');
 
-        if ($('#timer').is(":checked")) {
+        if ($('#reading_timer').is(":checked")) {
            
             timer.stopTimer();
         }

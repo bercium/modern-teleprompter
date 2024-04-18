@@ -24,14 +24,14 @@
     </head>
     <body id="gui">
         <div id='count_down'></div>
-        
-        <header class='bd-sidebar'>
+
+        <aside class='bd-sidebar'>
             <div class="offcanvas offcanvas-start show" tabindex="-1" id="offcanvasResponsive" data-bs-scroll="true" data-bs-backdrop="false"  aria-labelledby="offcanvasResponsiveLabel">
                 <div class="offcanvas-header text-center">
 
                     <h1 class="offcanvas-title text-center text-primary" id="offcanvasResponsiveLabel">
                         <a class="active text-decoration-none icon-play" id="start_prompter" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive"><i class="bi bi-play-circle play"></i> Start</a>
-                        
+
                     </h1>
 
                     <a class="button small icon-arrow-up reset" href="#" title="Shortcut keys (ESC)" onclick="return false;"></a>
@@ -51,27 +51,27 @@
                                         <label class="speed_label" for="speed"  >Scroll speed <span>(20)</span></label>
                                         <input type="range" class="form-range" id="speed" min="1" max="50" title="Shortcut keys (LEFT, RIGHT)">
                                     </div>
-                                    
+
                                     <div class="mb-2">
                                         <label class="prompter_width_label" for="prompter_width">Prompt width <span>(100%)</span></label>
                                         <input type="range" class="form-range" id="prompter_width" min="20" max="100" title="Shortcut keys (W, E)">
                                     </div>
-                                    
+
                                     <div class="form-check form-switch">
                                         <input id="flipx" class="form-check-input" type="checkbox" role="switch" title="Shortcut key (X)">
                                         <label class="form-check-label" for="flipx">Flip text horizontaly</label>
                                     </div>
-                                    
+
                                     <div class="form-check form-switch mb-2">
                                         <input id="flipy" class="form-check-input" type="checkbox" role="switch" title="Shortcut keys (Y)">
                                         <label class="form-check-label" for="flipy">Flip text verticaly</label>
                                     </div>
-                                    
+
                                     <div class="form-check form-switch">
                                         <input id="text_lock" class="form-check-input" type="checkbox" role="switch">
                                         <label class="form-check-label" for="text_lock">Lock text editing</label>
                                     </div>
-                                
+
                                 </div>
                             </div>
                         </div>
@@ -83,25 +83,25 @@
                             </h2>
                             <div id="flush-2" class="accordion-collapse collapse">
                                 <div class="accordion-body">
-                                    
+
                                     <div class="mb-2">
                                         <label class="font_size_label" for="font_size"  >Font Size <span>(60)</span></label>
                                         <input type="range" class="form-range" id="font_size" min="16" max="120"  title="Shortcut keys (F, G)">
                                     </div>
-                                    
+
                                     <div class="form-check form-switch mb-2">
                                         <input id="font_bold" class="form-check-input" type="checkbox" role="switch">
                                         <label class="form-check-label" for="font_bold">Bold text</label>
                                     </div>
-                                    
-                                    
-                                    <input type="color" id="text-color-picker" class="form-control form-control-color align-middle mb-2 mt-2" value="#ffffff" title="Text color" style='display: inline;'>
-                                    <label class="" for="text-color-picker">Text color</label>
+
+
+                                    <input type="color" id="text_color_picker" class="form-control form-control-color align-middle mb-2 mt-2" value="#ffffff" title="Text color" style='display: inline;'>
+                                    <label class="" for="text_color_picker">Text color</label>
                                     <br>
-                                    <input type="color" id="background-color-picker" class="form-control form-control-color align-middle" value="#000000" title="Background color" style='display: inline;'>
-                                    <label class="" for="background-color-picker">Background color</label>
-                                    
-                                
+                                    <input type="color" id="background_color_picker" class="form-control form-control-color align-middle" value="#000000" title="Background color" style='display: inline;'>
+                                    <label class="" for="background_color_picker">Background color</label>
+
+
                                 </div>
                             </div>
                         </div>
@@ -113,47 +113,90 @@
                             </h2>
                             <div id="flush-3" class="accordion-collapse collapse">
                                 <div class="accordion-body">
-                                
-                                <div class="mb-2">
-                                    <div class="form-check form-switch">
-                                        <input id="marker_enabled" class="form-check-input" type="checkbox" role="switch" title="Show reading marker" >
-                                        <label class="form-check-label marker_position_label " for="marker_enable">Reading marker position <span>(35%)</span></label>
+
+                                    <div class="mb-2">
+                                        <div class="form-check form-switch">
+                                            <input id="marker_enabled" class="form-check-input" type="checkbox" role="switch" title="Show reading marker" >
+                                            <label class="form-check-label marker_position_label " for="marker_enable">Reading marker position <span>(35%)</span></label>
+                                        </div>
+                                        <input type="range" class="form-range" id="marker_position" min="10" max="90" title="Shortcut keys (N, M)">
                                     </div>
-                                    <input type="range" class="form-range" id="marker_position" min="10" max="90" title="Shortcut keys (N, M)">
-                                </div>
-                                    
-                                <div class="form-check form-switch mb-2">
-                                    <input id="timer" class="form-check-input" type="checkbox" role="switch" title="Show reading time" >
-                                    <label class="form-check-label" for="timer">Show reading time</label>
-                                </div>
-                                
-                                <div class="mb-2">
-                                    Countdown before start<br>
-                                    <input type="radio" class="btn-check" name="start-delay" id="sec-0" value='0' autocomplete="off" checked>
-                                    <label class="btn btn-outline-primary btn-sm" for="sec-0">0 sec</label>
 
-                                    <input type="radio" class="btn-check" name="start-delay" id="sec-3" value='3' autocomplete="off">
-                                    <label class="btn btn-outline-primary btn-sm" for="sec-3">3 sec</label>
+                                    <div class="form-check form-switch mb-2">
+                                        <input id="reading_timer" class="form-check-input" type="checkbox" role="switch" title="Show reading time" >
+                                        <label class="form-check-label" for="reading_timer">Show reading time</label>
+                                    </div>
 
-                                    <input type="radio" class="btn-check" name="start-delay" id="sec-5" value='5' autocomplete="off">
-                                    <label class="btn btn-outline-primary btn-sm" for="sec-5">5 sec</label>
+                                    <div class="mb-2">
+                                        Countdown before start<br>
+                                        <input type="radio" class="btn-check" name="start_delay" id="count_down_sec_0" value='0' autocomplete="off">
+                                        <label class="btn btn-outline-primary btn-sm" for="count_down_sec_0">0 sec</label>
 
-                                    <input type="radio" class="btn-check" name="start-delay" id="sec-10" value='10' autocomplete="off">
-                                    <label class="btn btn-outline-primary btn-sm" for="sec-10">10 sec</label>
+                                        <input type="radio" class="btn-check" name="start_delay" id="count_down_sec_3" value='3' autocomplete="off">
+                                        <label class="btn btn-outline-primary btn-sm" for="count_down_sec_3">3 sec</label>
+
+                                        <input type="radio" class="btn-check" name="start_delay" id="count_down_sec_5" value='5' autocomplete="off">
+                                        <label class="btn btn-outline-primary btn-sm" for="count_down_sec_5">5 sec</label>
+
+                                        <input type="radio" class="btn-check" name="start_delay" id="count_down_sec_10" value='10' autocomplete="off">
+                                        <label class="btn btn-outline-primary btn-sm" for="count_down_sec_10">10 sec</label>
+                                    </div>
+
+
                                 </div>
-                                    
-                                
-                                <a class="button small icon-cloud-upload upload" href="#" title="Save text to cloud" onclick="return false;"></a>
-                                <a class="button small icon-cloud-download download" href="#" title="Load text from cloud (L)" onclick="return false;"></a>
-                                
+                            </div>
+                        </div>
+                        <div class="accordion-item d- none">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-4" aria-expanded="false" aria-controls="flush-4">
+                                    <i class="bi bi-wifi me-2"></i>Remote control
+                                </button>
+                            </h2>
+                            <div id="flush-4" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+
+                                    <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="controller-tab" data-bs-toggle="tab" data-bs-target="#controller-tab-pane" type="button" role="tab" aria-controls="controller-tab-pane" aria-selected="true">Controller</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="viewer-tab" data-bs-toggle="tab" data-bs-target="#viewer-tab-pane" type="button" role="tab" aria-controls="viewer-tab-pane" aria-selected="false">Viewer</button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content my-3" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="controller-tab-pane" role="tabpanel" aria-labelledby="controller-tab" tabindex="0">
+                                            <div class="form-floating mb-3">
+                                                <input type="text" class="form-control form-control-sm" id="upload_code" value="XXX-XXX-XXXX" disabled>
+                                                <label for="upload_code">Remote code</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="password" class="form-control form-control-sm" id="upload_password" placeholder="Password">
+                                                <label for="upload_password">Password</label>
+                                            </div>
+                                            <button id="cloud_upload"  type="button" class="btn btn-primary col-12"><i class="bi bi-cloud-arrow-up me-2"></i>Save to cloud</button>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="viewer-tab-pane" role="tabpanel" aria-labelledby="viewer-tab" tabindex="0">
+                                            <div class="form-floating mb-3">
+                                                <input type="text" class="form-control form-control-sm" id="download_code" placeholder="XXX-XXX-XXXX">
+                                                <label for="download_code">Remote code</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="password" class="form-control form-control-sm" id="download_password" placeholder="Password">
+                                                <label for="download_password">Password</label>
+                                            </div>
+                                            <button id="cloud_download" type="button" class="btn btn-primary col-12" title="Load text from cloud (L)"><i class="bi bi-cloud-arrow-down me-2"></i>Load from cloud</button>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
-        </header>
+        </aside>
         <article>
             <div class="overlay">
                 <div class="top">
@@ -189,10 +232,10 @@
                 <br><br>
                 Thanks for Stopping by.
             </div>
-            
+
             <i class="bi bi-chevron-double-right marker text-primary"></i>
             <i class="bi bi-chevron-double-left marker text-primary"></i>
-            
+
         </article>
 
 
