@@ -20,21 +20,18 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
         <link rel="stylesheet" href="css/style.css?v=1.1.2">
-        <link rel="stylesheet" href="css/font-awesome.min.css">
     </head>
     <body id="gui">
         <div id='count_down'></div>
 
         <aside class='bd-sidebar'>
-            <div class="offcanvas offcanvas-start show" tabindex="-1" id="offcanvasResponsive" data-bs-scroll="true" data-bs-backdrop="false"  aria-labelledby="offcanvasResponsiveLabel">
+            <div id="offcanvas" class="offcanvas offcanvas-start show" tabindex="-1" data-bs-scroll="true" data-bs-backdrop="false"  aria-labelledby="offcanvasResponsiveLabel">
                 <div class="offcanvas-header text-center">
 
                     <h1 class="offcanvas-title text-center text-primary" id="offcanvasResponsiveLabel">
-                        <a class="active text-decoration-none icon-play" id="start_prompter" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive"><i class="bi bi-play-circle play"></i> Start</a>
-
+                        <a class="text-decoration-none" id="start_prompter" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;" ><i class="bi bi-play-circle play"></i> Start</a>
                     </h1>
 
-                    <a class="button small icon-arrow-up reset" href="#" title="Shortcut keys (ESC)" onclick="return false;"></a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body p-0">
@@ -199,8 +196,9 @@
         </aside>
         <article>
             <div class="overlay">
+                <a class="text-decoration-none" id="start_prompter" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;" ><i class="bi bi-play-circle play"></i> Start</a>
                 <div class="top">
-                    <div class="timer_container hide"><h1><i class="icon icon-time"></i> <span class="clock">00:00:00</span></h1></div>
+                    <div class="timer_container"><h1><i class="icon icon-time"></i> <span class="clock">00:00:00</span></h1></div>
                     <div style="float:right; margin-right:10px;"><a class="button icon-play play active" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;"></a></div>
                 </div>
                 <div class="bottom"></div>

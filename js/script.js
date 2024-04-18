@@ -13,10 +13,11 @@
         initFontBold = false,
         initTextLock = false,
         initStartDelay = 0, // before we start how much delay
-        initRemoteCode = '',
-        
+        initRemoteCode = random_string(),
+        coutdown_timer,
         dragable = false,
-        scrollDelay, //scrolling timer        
+        scrollDelay, //scrolling timer     
+        initOffcanvas = new bootstrap.Offcanvas('#offcanvas'),
         timer = $('.clock').timer({
             stopVal: 10000,
             onChange: function (time) {
@@ -103,22 +104,23 @@
         $("input[name='start_delay']").on("change",function () { startDelay(); });
         $("#upload_code").val(initRemoteCode);
         
-        // teleprompter change
-        $('#teleprompter').on("keyup",update_teleprompter);
+        $('#teleprompter').on("keyup",function () { update_teleprompter(); }); // teleprompter change
+        
+        
+        // Listen for actions and button clicks
         $('body').on("keydown",keyShortcuts).on("mousedown",function(){dragable = true;}).on("mouseup",function(){dragable = false;});
+ 
         
+        // Listen for Play Button Click
+        $('#start_prompter').on("click",function () { start_prompter(); });
+        $('#pause_prompter').on("click",function () { stop_teleprompter(); });
         
-        // Listen for Key Presses
+        $('#cloud_upload').on("click",function () { cloud_save_data(); });
+        $('#cloud_download').on("click",function () { cloud_load_data(); });
         
+
 
         // Setup GUI
-        $('article').stop().animate({ scrollTop: 0 }, 100, 'linear', function () { $('article').clearQueue(); });
-
-
-        //$('article #teleprompter').css({'padding-bottom': Math.ceil($(window).height() - $('header').height()) + 'px' });
-
-        // Create Font Size Slider
-
 
 
         
@@ -132,55 +134,8 @@
                                 }
                           });
         
-        // Listen for Reset Button Click
-        $('.button.reset').on("click", function () {
-            stop_teleprompter();
-            resetTimer();
+       
 
-            $('article').stop().animate({
-                scrollTop: 0
-            }, 100, 'linear', function () {
-                $('article').clearQueue();
-            });
-        });
-
-
-        
-        // Listen for Play Button Click
-        $('#start_prompter').on("click",function () {
-            if ($(this).hasClass('icon-play')) {
-                
-                var counter = Number($("input[name='start_delay']:checked").val());
-                if (counter > 0){
-                    $("#count_down").addClass("active").html(counter);
-
-                    coutdown_timer = setInterval(() => {
-                      counter--;
-                      if (counter == 0){
-                            clearInterval(coutdown_timer);
-                            $("#count_down").removeClass("active").html("");
-                            start_teleprompter();
-                      }else $("#count_down").html(counter);
-
-                    }, 1000);
-                }  else start_teleprompter();
-            } else {
-                stop_teleprompter();
-            }
-        });
-
-        $('#cloud_upload').on("click",function () {
-            $('#cloud_upload i').addClass("bi-cloud-upload-fill").removeClass("bi-cloud-arrow-up");
-            //setTimeout(function(){$('.button.upload').removeClass("active");}, 2000);
-            $.post('cloud.php', // url
-                    {text: $("#teleprompter").html()}, // data to be submit
-                    function (data, status, jqXHR) {// success callback
-                       $('#cloud_upload i').addClass("bi-cloud-arrow-up").removeClass("bi-cloud-upload-fill");
-                    });
-        });
-
-        $('#cloud_download').on("click",function () { load_data(); });
-        //$('.button.showmarker').on("click",function () { toggleMarker(true); });
 
 
         if (config.get('teleprompter_text_color')) {
@@ -476,8 +431,18 @@
             }
         }
     }
+    
+    function cloud_save_data(){
+        $('#cloud_upload i').addClass("bi-cloud-upload-fill").removeClass("bi-cloud-arrow-up");
+        //setTimeout(function(){$('.button.upload').removeClass("active");}, 2000);
+        $.post('cloud.php', // url
+                {text: $("#teleprompter").html()}, // data to be submit
+                function (data, status, jqXHR) {// success callback
+                   $('#cloud_upload i').addClass("bi-cloud-arrow-up").removeClass("bi-cloud-upload-fill");
+                });
+    }
 
-    function load_data() {
+    function cloud_load_data() {
         $('#cloud_download i').addClass("bi-cloud-download-fill").removeClass("bi-cloud-arrow-down");
         $.get('cloud.php', // url
                 function (data, textStatus, jqXHR) {  // success callback
@@ -518,7 +483,7 @@
 
         // Reset GUI
         if (evt.keyCode == escape) {
-            $('.button.reset').trigger('click');
+            stop_teleprompter();
         }
         // Start Stop Scrolling
         else if (evt.keyCode == space || evt.keyCode == pause /* letter v - quieter key*/) {
@@ -582,12 +547,33 @@
         }
         // Marker position down
         else if (evt.keyCode == load_key) {
-            load_data();
+            cloud_load_data();
         } else return true;
 
         evt.preventDefault();
         evt.stopPropagation();
         return false;
+    }
+    
+    
+    function start_prompter(){
+        initOffcanvas.hide();
+        
+        var counter = Number($("input[name='start_delay']:checked").val());
+        if (counter > 0){
+            $("#count_down").addClass("active").html(counter);
+
+            coutdown_timer = setInterval(() => {
+              counter--;
+              if (counter == 0){
+                    clearInterval(coutdown_timer);
+                    $("#count_down").removeClass("active").html("");
+                    start_teleprompter();
+              }else $("#count_down").html(counter);
+
+            }, 1000);
+        }  else start_teleprompter();
+        
     }
 
     // Start Teleprompter
@@ -598,12 +584,12 @@
 
         $('#teleprompter').attr('contenteditable', false);
         $('body').addClass('playing');
-        $('start_prompter').removeClass('icon-play').addClass('icon-pause');
+        //$('start_prompter').removeClass('icon-play').addClass('icon-pause');
         //$('header h1, header nav').fadeTo('slow', 0.15);
         
         
         //$('header').fadeOut('fast');
-        $('#offcanvasResponsive').removeClass('show');
+
         $('.marker, .overlay').not('.nomarker').fadeIn('slow');
 
         if ($('#reading_timer').is(":checked")) {
@@ -621,11 +607,12 @@
         }*/
 
         clearTimeout(scrollDelay);
+        clearInterval(coutdown_timer);
         $('#teleprompter').attr('contenteditable', true);
         //$('header h1, header nav').fadeTo('slow', 1);
         //$('header').fadeIn('fast');
-        $('#offcanvasResponsive').addClass('show');
-        $('start_prompter').removeClass('icon-pause').addClass('icon-play');
+        initOffcanvas.show();
+        //$('start_prompter').removeClass('icon-pause').addClass('icon-play');
         $('.marker, .overlay').fadeOut('slow');
         $('body').removeClass('playing');
 
@@ -633,7 +620,12 @@
            
             timer.stopTimer();
         }
-
+        resetTimer();
+        $('article').stop().animate({
+                scrollTop: 0
+            }, 100, 'linear', function () {
+                $('article').clearQueue();
+            });
     }
 
     // Update Teleprompter
