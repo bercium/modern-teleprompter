@@ -41,7 +41,7 @@ body.playing article
 }
 article .teleprompter
 {
-    padding: 300px 50px 1000px 100px;
+    padding: 300px 50px 300px 100px;
     font-size: 60px;
     line-height: 86px;
     z-index: 1;
@@ -110,7 +110,7 @@ article .teleprompter.flipxy
 }
 .overlay
 {
-    display: njone;
+    display: none;
     width: 100%;
     height: 100%;
     position: fixed;
