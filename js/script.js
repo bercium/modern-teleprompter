@@ -460,87 +460,30 @@
             width_down = 87, // W char
             marker_up = 77, // M char
             marker_down = 78, // N char
-            load_key = 76, // L char
-            speed_val = Number($('#speed').val()),
-            font_size = Number($('#font_size').val());
+            load_key = 76; // L char
 
         // Exit if we're inside an input field
-        if (typeof evt.target.id == 'undefined' || evt.target.id == 'teleprompter' ||  $(evt.target).is("input")) {
-            return;
-        } else if (typeof evt.target.id == 'undefined' || evt.target.id != 'gui') {
-            evt.preventDefault();
-            evt.stopPropagation();
-            return false;
+        if (typeof evt.target.id == 'undefined' || evt.target.id == 'teleprompter' ||  $(evt.target).is("input") || (evt.target.id != 'gui' && evt.target.id != 'offcanvas')) {
+            return true;
         }
 
         // Reset GUI
-        if (evt.keyCode == escape) {
-            stop_teleprompter();
-        }
-        // Start Stop Scrolling
-        else if (evt.keyCode == space || evt.keyCode == pause /* letter v - quieter key*/) {
-            $('start_prompter').trigger('click');
-        }
-        // Decrease Speed with Left Arrow
-        else if (evt.keyCode == left) {
-            $('#speed').val(speed_val - 2);
-            promptSpeed(true);
-        }
-        // Increase Speed with Right Arrow
-        else if (evt.keyCode == right) {
-            $('#speed').val(speed_val + 2);
-            promptSpeed(true);
-        }
-        // Decrease Font Size with Minus
-        else if (evt.keyCode == font_down) {
-            $('#font_size').val(--font_size);
-            fontSize(true);
-        }
-        // Increase Font Size with Plus
-        else if (evt.keyCode == font_up) {
-            $('#font_size').val(++font_size);
-            fontSize(true);
-        }
-        // Move scroller down
-        else if (evt.keyCode == down) {
-            $('article').scrollTop($('article').scrollTop() - font_size / 4);
-        }
-        // Move scroller up
-        else if (evt.keyCode == up) {
-            $('article').scrollTop($('article').scrollTop() + font_size / 4);
-        }
-        // Flip text on X axis
-        else if (evt.keyCode == mirror_x) {
-            flipX(true);
-        }
-        // Flip text on y axis
-        else if (evt.keyCode == mirror_y) {
-            flipY(true)
-        }
-        // Prompter width up
-        else if (evt.keyCode == width_up) {
-            $('#prompter_width').val(Number($('#prompter_width').val()) + 10);
-            prompterWidth(save);
-        }
-        // Prompter width down
-        else if (evt.keyCode == width_down) {
-            $('#prompter_width').val(Number($('#prompter_width').val()) - 10);
-            prompterWidth(save);
-        }
-        // Marker position  up
-        else if (evt.keyCode == marker_up) {
-            $('#marker_position').val(Number($('#marker_position').val()) + 5);
-            markerPosition(save);
-        }
-        // Marker position down
-        else if (evt.keyCode == marker_down) {
-            $('#marker_position').val(Number($('#marker_position').val()) - 5);
-            markerPosition(save);
-        }
-        // Marker position down
-        else if (evt.keyCode == load_key) {
-            cloud_load_data();
-        } else return true;
+        if (evt.keyCode == escape) stop_teleprompter(); // stop teleprompter
+        else if (evt.keyCode == space || evt.keyCode == pause /* letter v - quieter key*/) $('#start_prompter').click();  // Start Stop Scrolling
+        else if (evt.keyCode == left) $('#speed').val(Number($('#speed').val()) - 2).change(); // Decrease Speed with Left Arrow
+        else if (evt.keyCode == right) $('#speed').val(Number($('#speed').val()) + 2).change(); // Increase Speed with Right Arrow
+        else if (evt.keyCode == font_down) $('#font_size').val(Number($('#font_size').val())-1).change();   // Decrease Font Size with Minus
+        else if (evt.keyCode == font_up) $('#font_size').val(Number($('#font_size').val())+1).change();  // Increase Font Size with Plus
+        else if (evt.keyCode == down) $('article').scrollTop($('article').scrollTop() - Number($('#font_size').val()) / 4); // Move scroller down
+        else if (evt.keyCode == up) $('article').scrollTop($('article').scrollTop() + Number($('#font_size').val()) / 4);  // Move scroller up
+        else if (evt.keyCode == mirror_x) $("#flipx").click(); // Flip text on X axis
+        else if (evt.keyCode == mirror_y) $("#flipy").click(); // Flip text on y axis
+        else if (evt.keyCode == width_up) $('#prompter_width').val(Number($('#prompter_width').val()) + 10).change(); // Prompter width up
+        else if (evt.keyCode == width_down) $('#prompter_width').val(Number($('#prompter_width').val()) - 10).change(); // Prompter width down
+        else if (evt.keyCode == marker_up) $('#marker_position').val(Number($('#marker_position').val()) + 5).change(); // Marker position  up
+        else if (evt.keyCode == marker_down) $('#marker_position').val(Number($('#marker_position').val()) - 5).change(); // Marker position down
+        else if (evt.keyCode == load_key) cloud_load_data(); // Marker position down
+        else return true;
 
         evt.preventDefault();
         evt.stopPropagation();
