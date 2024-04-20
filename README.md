@@ -12,6 +12,15 @@ You can also use some handy keyboard shortcuts. You can adjust the speed & font 
 
 Finally, we also made an effort to make sure your text will be easy to read.   So if you are pasting text from a word document, we'll do some cleaning up to make the breaks flow more easily.
 
+[![Try it Online](https://img.shields.io/badge/TRY_IT_ONLINE-for_free-green?style=for-the-badge)](http://teleprompter.evolution-team.net/)
+
+
+## Screenshots ##
+
+![Screenshot](img/setup-screen.png "Setup screen")
+
+![Screenshot](img/player-screen.png "Player screen")
+
 
 ## Features ##
 
@@ -24,12 +33,6 @@ Finally, we also made an effort to make sure your text will be easy to read.   S
 - [X] Auto full screen on play
 - [X] Remote control support
 - [X] Changes saved automatically
-
-## Screenshots ##
-
-![Screenshot](img/setup-screen.png "Setup screen")
-
-![Screenshot](img/player-screen.png "Player screen")
 
 
 ## Keyboard Shortcuts ##
