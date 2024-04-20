@@ -56,7 +56,7 @@
     };
     
     
-
+    
     $(function(){
         
         // Load saved values
@@ -117,7 +117,7 @@
         
         // Listen for Play Button Click
         $('#start_prompter').on("click",function () { teleprompterStart(); });
-        $('#pause_prompter').on("click",function () { teleprompterStop(); });
+        $('#pause_prompter').on("click",function () { teleprompterStop(); }).hide();
         
         $('#cloud_upload').on("click",function () { cloudSaveData(); });
         $('#cloud_download_settings').on("click",function () { cloudLoadData("settings"); });
@@ -125,51 +125,34 @@
 
         // set initial UI
         
-        
-
-
-
-        if (config.get('teleprompter_text_color')) {
-            initTextColor = config.get('teleprompter_text_color');
-            $('#text_color_picker').val(initTextColor);
-            $('#teleprompter').css('color', initTextColor);
-            $('#count_down').css('color', initTextColor);
-        }
+        /*
         if (config.get('teleprompter_background_color')) {
             initBackgroundColor = config.get('teleprompter_background_color');
             $('#background_color_picker').val(initBackgroundColor);
             $('#teleprompter').css('background-color', initBackgroundColor);
             $('article').css('background-color', initBackgroundColor);
         } else {
-            clean_teleprompter();
-        }
+            teleprompterClean();
+        }*/
 
-        // Run initial configuration on sliders
+        // Run initial configuration
+        fontBold(false);
+        textLock(false);
+        textColor(false);
+        backgroundColor(false);
         fontSize(false);
         promptSpeed(false);
         prompterWidth(false);
-        markerPosition(false);
         flipX(false);
         flipY(false);
         readingMarker(false);
+        markerPosition(false);
         readingTimer(false);
 
     });
-
-
-    function random_string() {
-        var chars = "123456789ABCDEFGHIJKLMNOPQRSTUVZWXY";
-        var string_length = 10;
-        var randomstring = '';
-
-        for (var i = 0; i < string_length; i++) {
-            var rnum = Math.floor(Math.random() * chars.length);
-            randomstring += chars.substring(rnum, rnum + 1);
-            if (i == 2 || i == 5) randomstring += "-";
-        }
-
-        return randomstring;
-    }
+    
+    
+    // ********   Click actions
     
     function fontBold(save){
         if ($("#font_bold").is(":checked")) $('#teleprompter').css("font-weight", "bold");
@@ -224,11 +207,9 @@
 
     // Manage Speed Change
     function promptSpeed(save) {
-        var speed = $('#speed').val();
-        initPageSpeed = Math.floor(50 - speed);
-        $('label.speed_label span').text('(' + speed + ')');
+        $('label.speed_label span').text('(' + $('#speed').val() + ')');
 
-        if (save) config.set('teleprompter_speed', speed);
+        if (save) config.set('teleprompter_speed', $('#speed').val());
     }
 
 
@@ -239,9 +220,6 @@
         if (save) config.set('teleprompter_prompter_width', $('#prompter_width').val());
     }
 
-    function resetTimer() {
-        timer.resetTimer();
-    }
 
     function flipX(save) {
         //resetTimer();
@@ -264,17 +242,9 @@
         
 
         if ($('#flipy').is(":checked")) {
-            $('article').stop().animate({
-                scrollTop: $("#teleprompter").height()
-            }, 250, 'swing', function () {
-                $('article').clearQueue();
-            });
+            scrollAnimation($("#teleprompter").height());
         } else {
-            $('article').stop().animate({
-                scrollTop: 0
-            }, 250, 'swing', function () {
-                $('article').clearQueue();
-            });
+            scrollAnimation();
         }
         
         if (save) config.set('teleprompter_flip_y', $('#flipy').is(":checked"));
@@ -341,104 +311,35 @@
     }
     
 
-    // Listen for Key Presses on Body
-    function keyShortcuts(evt) {
-        var space = 32,
-            pause = 80, // letter V for letter P use 80
-            escape = 27,
-            left = 37,
-            right = 39,
-            up = 38,
-            down = 40,
-            font_up = 71, // G char
-            font_down = 70, // F char
-            mirror_x = 88, // Y char
-            mirror_y = 89, // X char
-            width_up = 69, // E charr
-            width_down = 87, // W char
-            marker_up = 77, // M char
-            marker_down = 78, // N char
-            load_key = 76; // L char
-
-        // Exit if we're inside an input field
-        if (typeof evt.target.id == 'undefined' || evt.target.id == 'teleprompter' ||  $(evt.target).is("input") || (evt.target.id != 'gui' && evt.target.id != 'offcanvas')) {
-            return true;
-        }
-
-        // Reset GUI
-        if (evt.keyCode == escape) teleprompterStop(); // stop teleprompter
-        else if (evt.keyCode == space || evt.keyCode == pause /* letter v - quieter key*/) $('#start_prompter').click();  // Start Stop Scrolling
-        else if (evt.keyCode == left) $('#speed').val(Number($('#speed').val()) - 2).change(); // Decrease Speed with Left Arrow
-        else if (evt.keyCode == right) $('#speed').val(Number($('#speed').val()) + 2).change(); // Increase Speed with Right Arrow
-        else if (evt.keyCode == font_down) $('#font_size').val(Number($('#font_size').val())-1).change();   // Decrease Font Size with Minus
-        else if (evt.keyCode == font_up) $('#font_size').val(Number($('#font_size').val())+1).change();  // Increase Font Size with Plus
-        else if (evt.keyCode == down) $('article').scrollTop($('article').scrollTop() - Number($('#font_size').val()) / 4); // Move scroller down
-        else if (evt.keyCode == up) $('article').scrollTop($('article').scrollTop() + Number($('#font_size').val()) / 4);  // Move scroller up
-        else if (evt.keyCode == mirror_x) $("#flipx").click(); // Flip text on X axis
-        else if (evt.keyCode == mirror_y) $("#flipy").click(); // Flip text on y axis
-        else if (evt.keyCode == width_up) $('#prompter_width').val(Number($('#prompter_width').val()) + 10).change(); // Prompter width up
-        else if (evt.keyCode == width_down) $('#prompter_width').val(Number($('#prompter_width').val()) - 10).change(); // Prompter width down
-        else if (evt.keyCode == marker_up) $('#marker_position').val(Number($('#marker_position').val()) + 5).change(); // Marker position  up
-        else if (evt.keyCode == marker_down) $('#marker_position').val(Number($('#marker_position').val()) - 5).change(); // Marker position down
-        else if (evt.keyCode == load_key) cloudLoadData("text"); // Load text
-        else return true;
-
-        evt.preventDefault();
-        evt.stopPropagation();
-        return false;
+    // ********   Teleprompter
+    
+    function scrollAnimation(position = 0, duration = 250, easing = 'swing'){
+        $('article').stop().animate({ scrollTop: position }, duration, easing, function () { $('article').clearQueue(); }, duration);
     }
     
     
      // Manage Scrolling Teleprompter
-    function pageScroll(direction, offset) {
-        var animate = 0;
-
-        if (!offset) offset = 2;
-
-        if (!direction) {
-            direction = 'down'
-            clearTimeout(scrollDelay);
-            scrollDelay = setTimeout(pageScroll, initPageSpeed);
-        } else {
-            offset = window.screen.availHeight / 2;
-            animate = 500;
-        }
-
+    function pageScroll() {
+       
+        initPageSpeed = Math.floor(50 - Number($('#speed').val()));
+        clearTimeout(scrollDelay);
+        scrollDelay = setTimeout(pageScroll, initPageSpeed);
+  
         if ($('#flipy').is(":checked")) {
-            $('article').stop().animate({
-                scrollTop: (direction === 'down') ? '-=' + offset + 'px' : '+=' + offset + 'px'
-            }, animate, 'linear', function () {
-                $('article').clearQueue();
-            });
+            scrollAnimation('-=3px',0,"linear");
 
             // We're at the bottom of the document, stop
             if ($("article").scrollTop() === 0) {
                 teleprompterStop();
-                setTimeout(function () {
-                    $('article').stop().animate({
-                        scrollTop: $("#teleprompter").height() + 100
-                    }, 500, 'swing', function () {
-                        $('article').clearQueue();
-                    });
-                }, 500);
+                setTimeout(function () { scrollAnimation($("#teleprompter").height(),500); }, 500);
             }
         } else {
-            $('article').stop().animate({
-                scrollTop: (direction === 'down') ? '+=' + offset + 'px' : '-=' + offset + 'px'
-            }, animate, 'linear', function () {
-                $('article').clearQueue();
-            });
+             scrollAnimation('+=3px',0,"linear");
 
             // We're at the bottom of the document, stop
             if ($("article").scrollTop() >= (($("article")[0].scrollHeight - $(window).height()) - 100)) {
                 teleprompterStop();
-                setTimeout(function () {
-                    $('article').stop().animate({
-                        scrollTop: 0
-                    }, 500, 'swing', function () {
-                        $('article').clearQueue();
-                    });
-                }, 500);
+                setTimeout(function () { scrollAnimation(0, 500); }, 500);
             }
         }
     }
@@ -448,8 +349,13 @@
         initOffcanvas.hide();
         
         $('#teleprompter').attr('contenteditable', false);
-        $('body').addClass('playing');
+        $('article').addClass('playing');
+        
         $('.overlay').not('.nomarker').fadeIn('fast');
+        $('#menu_burger_icon').hide();
+        $('#pause_prompter').show();
+        
+        fullScreenEnter();
         
         
         var counter = Number($("input[name='start_delay']:checked").val());
@@ -475,42 +381,59 @@
         
         
     }
+    
+    function teleprompterPause() {
+        
+    }
 
     // Stop Teleprompter
     function teleprompterStop() {
-        /*if (socket && remote) {
-            socket.emit('clientCommand', 'stop');
-        }*/
+        fullScreenExit();
 
         clearTimeout(scrollDelay);
         clearInterval(coutdownTimer);
-        $('#teleprompter').attr('contenteditable', true);
-        //$('header h1, header nav').fadeTo('slow', 1);
-        //$('header').fadeIn('fast');
+        
+        if ($("#text_lock").is(":checked")) $('#teleprompter').prop("contenteditable", false);
+        else $('#teleprompter').prop("contenteditable", true);
+        
         initOffcanvas.show();
-        //$('start_prompter').removeClass('icon-pause').addClass('icon-play');
+        
         $('.overlay').fadeOut('slow');
-        $('body').removeClass('playing');
+        $('article').removeClass('playing');
+        $('#menu_burger_icon').show();
+        $('#pause_prompter').hide();
+        $("#count_down").removeClass("active").html("");
 
-        if ($('#reading_timer').is(":checked")) {
-           
-            timer.stopTimer();
-        }
-        resetTimer();
-        $('article').stop().animate({
-                scrollTop: 0
-            }, 100, 'linear', function () {
-                $('article').clearQueue();
-            });
+        if ($('#reading_timer').is(":checked")) timer.stopTimer();
+        timer.resetTimer();
+        //resetTimer();
+        
+        // get to the beginning
+        if ($('#flipy').is(":checked")) scrollAnimation($("#teleprompter").height());
+        else scrollAnimation();
+        
     }
 
+    
+    function teleprompterFocus(isFocused) {
+        if (isFocused) $('#teleprompter').removeClass("flipx").removeClass("flipy").removeClass("flipxy");
+        else{
+            if ($('#flipx').is(":checked") && $('#flipy').is(":checked")) $('#teleprompter').addClass("flipxy");
+                else{
+                if ($('#flipx').is(":checked")) $('#teleprompter').addClass("flipx");
+                if ($('#flipy').is(":checked")) $('#teleprompter').addClass("flipy");
+            }
+        }
+    }
+    
+    
     // Update Teleprompter
     function teleprompterUpdate() {
         config.set('teleprompter_text', $('#teleprompter').html());
-    }
-
-    // Clean Teleprompter
-    function clean_teleprompter() {
+    }    
+    
+        // Clean Teleprompter
+    function teleprompterClean() {
         var text = $('#teleprompter').html();
         text = text.replace(/<br>+/g, '@@').replace(/@@@@/g, '</p><p>');
         text = text.replace(/@@/g, '<br>');
@@ -524,21 +447,105 @@
         $('#teleprompter').html(text);
     }
     
-    function teleprompterFocus(isFocused) {
-        if (isFocused) $('#teleprompter').removeClass("flipx").removeClass("flipy").removeClass("flipxy");
-        else{
-            if ($('#flipx').is(":checked") && $('#flipy').is(":checked")) $('#teleprompter').addClass("flipxy");
-                else{
-                if ($('#flipx').is(":checked")) $('#teleprompter').addClass("flipx");
-                if ($('#flipy').is(":checked")) $('#teleprompter').addClass("flipy");
-            }
-        }
-    }
+    
+    // ********   Other functions
     
     function pasteCleanText(e){
         e.preventDefault();
         var text = (e.originalEvent || e).clipboardData.getData('text/plain');
         document.execCommand("insertHTML", false, text);
+    }
+    
+
+    function random_string() {
+        var chars = "123456789ABCDEFGHIJKLMNOPQRSTUVZWXY";
+        var string_length = 10;
+        var randomstring = '';
+
+        for (var i = 0; i < string_length; i++) {
+            var rnum = Math.floor(Math.random() * chars.length);
+            randomstring += chars.substring(rnum, rnum + 1);
+            if (i == 2 || i == 5) randomstring += "-";
+        }
+
+        return randomstring;
+    }
+    
+    
+    function fullScreenEnter(){
+        var elem = document.body;
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+          elem.msRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+          elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        }
+    }
+    
+    function fullScreenExit(){
+        var elem = document;
+        if (elem.exitFullscreen) {
+          elem.exitFullscreen();
+        } else if (elem.msExitFullscreen) {
+          elem.msExitFullscreen();
+        } else if (elem.mozExitFullScreen) {
+          elem.mozExitFullScreen();
+        } else if (elem.webkitExitFullscreen) {
+          elem.webkitExitFullscreen();
+        }
+    }
+    
+       // Listen for Key Presses on Body
+    function keyShortcuts(evt) {
+        var space = 32,
+            pause = 80, // letter V =  for letter P use 80
+            escape = 27,
+            left = 37,
+            right = 39,
+            up = 38,
+            down = 40,
+            font_up = 71, // G char
+            font_down = 70, // F char
+            mirror_x = 88, // Y char
+            mirror_y = 89, // X char
+            width_up = 69, // E charr
+            width_down = 87, // W char
+            marker_up = 77, // M char
+            marker_down = 78, // N char
+            load_key = 76; // L char
+
+        // Exit if we're inside an input field
+        if (typeof evt.target.id == 'undefined' || evt.target.id == 'teleprompter' ||  $(evt.target).is("input") || (evt.target.id != 'gui' && evt.target.id != 'offcanvas')) {
+            return true;
+        }
+
+        // Reset GUI
+        if (evt.keyCode == escape) teleprompterStop(); // stop teleprompter
+        else if (evt.keyCode == space || evt.keyCode == pause /* letter v - quieter key*/){
+            if ($('article').hasClass('playing')) teleprompterStop();
+            else teleprompterStart();
+        }  // Start Stop Scrolling
+        else if (evt.keyCode == left) $('#speed').val(Number($('#speed').val()) - 2).change(); // Decrease Speed with Left Arrow
+        else if (evt.keyCode == right) $('#speed').val(Number($('#speed').val()) + 2).change(); // Increase Speed with Right Arrow
+        else if (evt.keyCode == font_down) $('#font_size').val(Number($('#font_size').val())-1).change();   // Decrease Font Size with Minus
+        else if (evt.keyCode == font_up) $('#font_size').val(Number($('#font_size').val())+1).change();  // Increase Font Size with Plus
+        else if (evt.keyCode == down) $('article').scrollTop($('article').scrollTop() - Number($('#font_size').val()) / 4); // Move scroller down
+        else if (evt.keyCode == up) $('article').scrollTop($('article').scrollTop() + Number($('#font_size').val()) / 4);  // Move scroller up
+        else if (evt.keyCode == mirror_x) $("#flipx").click(); // Flip text on X axis
+        else if (evt.keyCode == mirror_y) $("#flipy").click(); // Flip text on y axis
+        else if (evt.keyCode == width_up) $('#prompter_width').val(Number($('#prompter_width').val()) + 10).change(); // Prompter width up
+        else if (evt.keyCode == width_down) $('#prompter_width').val(Number($('#prompter_width').val()) - 10).change(); // Prompter width down
+        else if (evt.keyCode == marker_up) $('#marker_position').val(Number($('#marker_position').val()) + 5).change(); // Marker position  up
+        else if (evt.keyCode == marker_down) $('#marker_position').val(Number($('#marker_position').val()) - 5).change(); // Marker position down
+        else if (evt.keyCode == load_key) cloudLoadData("text"); // Load text
+        else return true;
+
+        evt.preventDefault();
+        evt.stopPropagation();
+        return false;
     }
     
 })(jQuery);

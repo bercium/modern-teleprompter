@@ -21,13 +21,6 @@ body, html{
 }
 
 
-.timer_container h1 .span.clock
-{
-    display:none;
-    color: #fff;
-    padding-left: 10px;
-}
-
 article
 {
     position: relative;
@@ -35,8 +28,7 @@ article
     overflow: auto;
     background-color: #141414;
 }
-body.playing article
-{
+article.playing{
     overflow: hidden;
 }
 article .teleprompter
@@ -153,6 +145,10 @@ article .teleprompter.flipxy
     bottom:0px;
     height: 20%;
     background:linear-gradient(to bottom, transparent 0%, #000 100%);
+}
+
+.play_menu{
+    z-index: 150;
 }
 
 #count_down{

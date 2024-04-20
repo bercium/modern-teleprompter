@@ -32,7 +32,7 @@
                         <a class="text-decoration-none" id="start_prompter" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;" ><i class="bi bi-play-circle play"></i> Start</a>
                     </h1>
 
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body p-0 ">
                     
@@ -117,7 +117,7 @@
                                     <div class="mb-2">
                                         <div class="form-check form-switch">
                                             <input id="marker_enabled" class="form-check-input" type="checkbox" role="switch" title="Show reading marker" >
-                                            <label class="form-check-label marker_position_label " for="marker_enabled">Reading marker position <span>(35%)</span></label>
+                                            <label class="form-check-label marker_position_label " for="marker_enabled">Cue indicator <span>(35%)</span></label>
                                         </div>
                                         <input type="range" class="form-range" id="marker_position" min="10" max="90" title="Shortcut keys (N, M)">
                                     </div>
@@ -146,7 +146,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="accordion-item d- none">
+                        <div class="accordion-item d-none">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-4" aria-expanded="false" aria-controls="flush-4">
                                     <i class="bi bi-wifi me-2"></i>Remote control
@@ -193,13 +193,26 @@
             </div>
         </aside>
         <article>
-            <div class="overlay">
-                
-                <div class="top">
-                    <a class="text-decoration-none" id="start_prompter" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;" ><i class="bi bi-pause-circle play"></i></a>
-                    <div class="timer_container"><h1><i class="bi bi-clock-history"></i> <span class="clock">00:00:00</span></h1></div>
-                    <div style="float:right; margin-right:10px;"><a class="button icon-play play active" href="#" title="Shortcut keys (SPACE or P)" onclick="return false;"></a></div>
+            <div class="container-fluid text-right position-fixed play_menu">
+                <div class="row mt-3">
+                    <div class="col-auto me-auto">
+                        <button id="menu_burger_icon" class="btn btn-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas">
+                            <i class="bi bi-list fs-1 text-secondary"></i>
+                        </button>
+                        
+                        <button id="pause_prompter" class="btn btn-link" type="button">
+                            <i class="bi bi-stop-circle fs-1"></i>
+                        </button>
+                        
+                    </div>
+                    <div class="col-auto ">
+                        <div class="timer_container text-secondary me-2 fs-2"><i class="bi bi-clock-history"></i> <span class="clock">00:00:00</span></div>
+                    </div>
                 </div>
+               
+            </div>  
+            <div class="overlay">
+                <div class="top"></div>
                 <div class="bottom"></div>
             </div>
             <div class="teleprompter" id="teleprompter" contenteditable>
@@ -232,7 +245,7 @@
 
             <i class="bi bi-chevron-double-right marker text-primary"></i>
             <i class="bi bi-chevron-double-left marker text-primary"></i>
-
+            
         </article>
 
 
