@@ -116,7 +116,7 @@
  
         
         // Listen for Play Button Click
-        $('#start_prompter').on("click",function () { teleprompterStart(); });
+        $('#start_prompter, #start_prompter_display').on("click",function () { teleprompterStart(); });
         $('#pause_prompter').on("click",function () { teleprompterStop(); }).hide();
         
         $('#cloud_upload').on("click",function () { cloudSaveData(); });
@@ -352,7 +352,7 @@
         $('article').addClass('playing');
         
         $('.overlay').not('.nomarker').fadeIn('fast');
-        $('#menu_burger_icon').hide();
+        $('#menu_burger_icon, #start_prompter_display').hide();
         $('#pause_prompter').show();
         
         fullScreenEnter();
@@ -400,7 +400,7 @@
         
         $('.overlay').fadeOut('slow');
         $('article').removeClass('playing');
-        $('#menu_burger_icon').show();
+        $('#menu_burger_icon, #start_prompter_display').show();
         $('#pause_prompter').hide();
         $("#count_down").removeClass("active").html("");
 
