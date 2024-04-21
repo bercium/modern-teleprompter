@@ -167,7 +167,7 @@ article .teleprompter.flipxy
 #count_down.active{
     display: flex;
     animation-name:scale;
-    animation-duration:1s;
+    animation-duration:1.05s;
     animation-iteration-count:infinite;
 }
 @keyframes scale{

@@ -9,3 +9,5 @@ Thumbs.db
 *.log
 node_modules
 /nbproject
+cloud.php
+/storage

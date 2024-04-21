@@ -1,6 +1,6 @@
 (function ($) {
     // default values
-    var initPageSpeed = 35,
+    var initPageSpeed = 45,
         initFontSize = 60,
         initPrompterWidth = 100,
         initMarkerPosition = 30,
@@ -55,54 +55,38 @@
         }
     };
     
-    
+   
     
     $(function(){
         
         // Load saved values
-        if (config.get('teleprompter_speed')) initPageSpeed = Number(config.get('teleprompter_speed'));
-        if (config.get('teleprompter_font_size')) initFontSize = Number(config.get('teleprompter_font_size'));
-        if (config.get('teleprompter_prompter_width')) initPrompterWidth = Number(config.get('teleprompter_prompter_width'));
-        if (config.get('teleprompter_marker_position')) initMarkerPosition = Number(config.get('teleprompter_marker_position'));
-                
-        if (config.get('teleprompter_text_color')) initTextColor = config.get('teleprompter_text_color');
-        if (config.get('teleprompter_background_color')) initBackgroundColor = config.get('teleprompter_background_color');
+        loadSettingsData();
         
-        if (config.get('teleprompter_flip_x')) initFlipX = config.get('teleprompter_flip_x') == 'true';
-        if (config.get('teleprompter_flip_y')) initFlipY = config.get('teleprompter_flip_y') == 'true';
-        if (config.get('teleprompter_marker')) initMarker = config.get('teleprompter_marker') == 'true';
-        if (config.get('teleprompter_reading_timer')) initReadingTimer = config.get('teleprompter_reading_timer') == 'true';
-
-        if (config.get('teleprompter_font_bold')) initFontBold = config.get('teleprompter_font_bold') == 'true';
-        if (config.get('teleprompter_text_lock')) initTextLock = config.get('teleprompter_text_lock') == 'true';
-        
-        if (config.get('teleprompter_start_delay')) initStartDelay = Number(config.get('teleprompter_start_delay'));
-        if (config.get('teleprompter_remote_code')) initRemoteCode = config.get('teleprompter_remote_code');
+        if (config.get('teleprompter_remote_code')) initRemoteCode = config.get('teleprompter_remote_code'); // can't change if set once
         else config.set('teleprompter_remote_code', initRemoteCode);
+        $("#upload_code").val(initRemoteCode);
         
         if (config.get('teleprompter_text')) $('#teleprompter').html(config.get('teleprompter_text'));
         
         
-        // set values and set actions
-        $('#speed').val(initPageSpeed).on("change", function () { promptSpeed(true); }).on("mousemove", function () { if (dragable) promptSpeed(false); });        
-        $('#font_size').val(initFontSize).on("change", function () { fontSize(true); }).on("mousemove", function () { if (dragable) fontSize(false); });
-        $('#prompter_width').val(initPrompterWidth).on("change", function () { prompterWidth(true); }).on("mousemove", function () { if (dragable) prompterWidth(false); });
-        $('#marker_position').val(initMarkerPosition).on("change", function () { markerPosition(true); }).on("mousemove", function () { if (dragable) markerPosition(false); });
+        // set set actions
+        $('#speed').on("change", function () { promptSpeed(true); }).on("mousemove", function () { if (dragable) promptSpeed(false); });        
+        $('#font_size').on("change", function () { fontSize(true); }).on("mousemove", function () { if (dragable) fontSize(false); });
+        $('#prompter_width').on("change", function () { prompterWidth(true); }).on("mousemove", function () { if (dragable) prompterWidth(false); });
+        $('#marker_position').on("change", function () { markerPosition(true); }).on("mousemove", function () { if (dragable) markerPosition(false); });
         
-        $('#text_color_picker').val(initTextColor).on("change",function () { textColor(true); });
-        $('#background_color_picker').val(initBackgroundColor).on("change",function () { backgroundColor(true); });
+        $('#text_color_picker').on("change",function () { textColor(true); });
+        $('#background_color_picker').on("change",function () { backgroundColor(true); });
         
-        $('#flipx').prop("checked",initFlipX).on("change", function(){flipX(true)} );
-        $('#flipy').prop("checked",initFlipY).on("change", function(){flipY(true)} );
-        $('#marker_enabled').prop("checked",initMarker).on("change", function(){readingMarker(true)} );
-        $('#reading_timer').prop("checked",initReadingTimer).on("change",function () { readingTimer(true); });
+        $('#flipx').on("change", function(){flipX(true)} );
+        $('#flipy').on("change", function(){flipY(true)} );
+        $('#marker_enabled').on("change", function(){readingMarker(true)} );
+        $('#reading_timer').on("change",function () { readingTimer(true); });
                 
-        $('#font_bold').prop('checked', initFontBold).on("change", function () { fontBold(true); });
-        $('#text_lock').prop('checked', initTextLock).on("change", function () { textLock(true) });
+        $('#font_bold').on("change", function () { fontBold(true); });
+        $('#text_lock').on("change", function () { textLock(true) });
         
-        $("input[name='start_delay'][value="+initStartDelay+"]").prop("checked",true).on("change",function () { startDelay(); });
         $("input[name='start_delay']").on("change",function () { startDelay(); });
-        $("#upload_code").val(initRemoteCode);
         
         // teleprompter actions, editing and focus changes
         $('#teleprompter').on("keyup",function () { teleprompterUpdate(); })
@@ -134,20 +118,9 @@
         } else {
             teleprompterClean();
         }*/
-
+        
         // Run initial configuration
-        fontBold(false);
-        textLock(false);
-        textColor(false);
-        backgroundColor(false);
-        fontSize(false);
-        promptSpeed(false);
-        prompterWidth(false);
-        flipX(false);
-        flipY(false);
-        readingMarker(false);
-        markerPosition(false);
-        readingTimer(false);
+        setSettings(false);
 
     });
     
@@ -292,22 +265,51 @@
 
 
     function cloudSaveData(){
-        $('#cloud_upload i').addClass("bi-cloud-upload-fill").removeClass("bi-cloud-arrow-up");
+        //$('#cloud_upload i').addClass("bi-cloud-upload-fill").removeClass("bi-cloud-arrow-up");
         //setTimeout(function(){$('.button.upload').removeClass("active");}, 2000);
-        $.post('cloud.php', // url
-                {text: $("#teleprompter").html()}, // data to be submit
+        $.post('https://teleprompter.evolution-team.net/cloud.php', // url
+                getSettingsData(), // data to be submit
                 function (data, status, jqXHR) {// success callback
-                   $('#cloud_upload i').addClass("bi-cloud-arrow-up").removeClass("bi-cloud-upload-fill");
+                   //$('#cloud_upload i').addClass("bi-cloud-arrow-up").removeClass("bi-cloud-upload-fill");
                 });
     }
 
     function cloudLoadData(what) {
         $('#cloud_download i').addClass("bi-cloud-download-fill").removeClass("bi-cloud-arrow-down");
-        $.get('cloud.php', // url
-                function (data, textStatus, jqXHR) {  // success callback
-                    $("#teleprompter").html(data);
-                    $('#cloud_download i').addClass("bi-cloud-arrow-down").removeClass("bi-cloud-download-fill");
-                });
+                
+        $.ajax({
+            url: 'https://teleprompter.evolution-team.net/cloud.php', // Update the endpoint as necessary
+            type: 'GET',
+            data: {type: what, remote_code:$("#download_code").val()},
+            dataType: 'json',
+            cache: false,
+            complete: function (event) {
+                $('#cloud_download i').addClass("bi-cloud-arrow-down").removeClass("bi-cloud-download-fill");
+                
+                var response = event.responseJSON;
+                
+                if (!response.error) {
+                    // Populate the row with data from the response
+                    if (what == "settings"){
+                        loadSettingsData(response);
+                        setSettings(true);
+                    }
+                    else{
+                        $('#teleprompter').html(response.teleprompter_text);
+                        teleprompterUpdate();
+                    }
+                } else {
+                    console.error(response.error);
+                    alert(response.error);
+                    // Handle the error (e.g., display a message to the user)
+                }
+            },
+            error: function (xhr, status, error) {
+                $('#cloud_download i').addClass("bi-cloud-arrow-down").removeClass("bi-cloud-download-fill");
+                console.error("Error fetching data: ", error);
+                alert(error);
+            }
+        });
     }
     
 
@@ -321,12 +323,12 @@
      // Manage Scrolling Teleprompter
     function pageScroll() {
        
-        initPageSpeed = Math.floor(50 - Number($('#speed').val()));
+        pageSpeed = Math.floor(80 - Number($('#speed').val()));
         clearTimeout(scrollDelay);
-        scrollDelay = setTimeout(pageScroll, initPageSpeed);
+        scrollDelay = setTimeout(pageScroll, pageSpeed);
   
         if ($('#flipy').is(":checked")) {
-            scrollAnimation('-=3px',0,"linear");
+            scrollAnimation('-=2px',0,"linear");
 
             // We're at the bottom of the document, stop
             if ($("article").scrollTop() === 0) {
@@ -334,7 +336,7 @@
                 setTimeout(function () { scrollAnimation($("#teleprompter").height(),500); }, 500);
             }
         } else {
-             scrollAnimation('+=3px',0,"linear");
+             scrollAnimation('+=2px',0,"linear");
 
             // We're at the bottom of the document, stop
             if ($("article").scrollTop() >= (($("article")[0].scrollHeight - $(window).height()) - 100)) {
@@ -497,6 +499,87 @@
           elem.webkitExitFullscreen();
         }
     }
+    
+     function booleanStringCheck(value){
+        if (value === "true") return true;
+        else if (value === "false") return false;
+        else return value;
+    }
+    
+    function dataFromStorage(key, fallbackValue, data = {}){
+        var value = null;
+        var dataEmpty = Object.keys(data).length === 0; 
+        
+        if (!dataEmpty && (key in data)){
+            return booleanStringCheck(data[key]);
+        }else if (config.get(key)){
+            return booleanStringCheck(config.get(key));
+        }else return fallbackValue;
+    }
+    
+    function loadSettingsData(data = {}){
+        
+        $('#speed').val(Number(dataFromStorage("teleprompter_speed",initPageSpeed,data)));
+        $('#font_size').val(Number(dataFromStorage("teleprompter_font_size",initFontSize,data)));
+        $('#prompter_width').val(Number(dataFromStorage("teleprompter_prompter_width",initPrompterWidth,data)));
+        $('#marker_position').val(Number(dataFromStorage("teleprompter_marker_position",initMarkerPosition,data)));
+        
+        $('#text_color_picker').val(dataFromStorage("teleprompter_text_color",initTextColor,data));
+        $('#background_color_picker').val(dataFromStorage("teleprompter_background_color",initBackgroundColor,data));
+        
+        $('#flipx').prop('checked', dataFromStorage("teleprompter_flip_x",initFlipX,data));
+        $('#flipy').prop('checked', dataFromStorage("teleprompter_flip_y",initFlipY,data));
+        $('#marker_enabled').prop('checked', dataFromStorage("teleprompter_marker",initMarker,data));
+        $('#reading_timer').prop('checked', dataFromStorage("teleprompter_reading_timer",initReadingTimer,data));
+        
+        $('#font_bold').prop('checked', dataFromStorage("teleprompter_font_bold",initFontBold,data));
+        $('#text_lock').prop('checked', dataFromStorage("teleprompter_text_lock",initTextLock,data));
+        
+        $("input[name='start_delay'][value="+dataFromStorage("teleprompter_start_delay",initStartDelay,data)+"]").prop("checked",true);
+    }
+    
+    function setSettings(save) {
+        fontBold(save);
+        textLock(save);
+        textColor(save);
+        backgroundColor(save);
+        fontSize(save);
+        promptSpeed(save);
+        prompterWidth(save);
+        flipX(save);
+        flipY(save);
+        readingMarker(save);
+        markerPosition(save);
+        readingTimer(save);
+    }
+    
+    
+    function getSettingsData(){
+        var data = {
+            teleprompter_speed:$('#speed').val(),
+            teleprompter_font_size:$('#font_size').val(),
+            teleprompter_prompter_width:$('#prompter_width').val(),
+            teleprompter_marker_position:$('#marker_position').val(),
+
+            teleprompter_text_color:$('#text_color_picker').val(),
+            teleprompter_background_color:$('#background_color_picker').val(),
+
+            teleprompter_flip_x:$('#flipx').is(':checked'),
+            teleprompter_flip_y:$('#flipy').is(':checked'),
+            teleprompter_marker:$('#marker_enabled').is(':checked'),
+            teleprompter_reading_timer:$('#reading_timer').is(':checked'),
+
+            teleprompter_font_bold:$('#font_bold').is(':checked'),
+            teleprompter_text_lock:$('#text_lock').is(':checked'),
+
+            teleprompter_start_delay:$("input[name='start_delay']:checked").val(),
+            
+            teleprompter_remote_code:initRemoteCode,
+            teleprompter_text:$('#teleprompter').html()
+        };
+        return data;
+    }
+    
     
        // Listen for Key Presses on Body
     function keyShortcuts(evt) {

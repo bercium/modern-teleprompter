@@ -2,15 +2,9 @@
 
 # Modern Teleprompter #
 
-A fork from the original with added functionalities telepromter: https://github.com/manifestinteractive/teleprompter
+A feature packed modern Teleprompter, with everything you need to read the text from a screen or teleprompter.
 
-You can edit the text right on the page. It'll even save your changes for you if you happen to leave the page.
-
-If you're using an iPad, you can add a shortcut to your home screen for full screen awesomeness.
-
-You can also use some handy keyboard shortcuts. You can adjust the speed & font size at the top right as well. I'm also experimenting with ways to flip the text around for you fancy folks using mirrors.
-
-Finally, we also made an effort to make sure your text will be easy to read.   So if you are pasting text from a word document, we'll do some cleaning up to make the breaks flow more easily.
+Feel free to check-out the features below or try out a free online version.
 
 [![Try it Online](https://img.shields.io/badge/TRY_IT_ONLINE-for_free-green?style=for-the-badge)](http://teleprompter.evolution-team.net/)
 
@@ -24,14 +18,14 @@ Finally, we also made an effort to make sure your text will be easy to read.   S
 
 ## Features ##
 
-- [X] Edit text in browser or send it remotely
-- [X] Mobile phone and tablet native support
+- [X] Edit text in the browser or send it remotely to any device
+- [X] Full mobile phone and tablet support
 - [X] Mirror ready - Flip X, Y or both axis
 - [X] Customize text legibility (color, bold, size)
-- [X] Countdown before start
+- [X] Countdown timer before teleprompter starts
 - [X] Handy keyboard shortcuts
-- [X] Auto full screen on play
-- [X] Remote control support
+- [X] Go full screen automatically
+- [X] Remote control settings and text separately
 - [X] Changes saved automatically
 
 
@@ -48,7 +42,7 @@ Key              | Alternatives                            | Description
 <kbd>F</kbd>     |                                         | Decrease Font Size
 <kbd>E</kbd>     |                                         | Increase Teleprompter Width
 <kbd>W</kbd>     |                                         | Decrease Teleprompter Width
-<kbd>ESC</kbd>   |                                         | Exit fullscreen / Stop Teleprompter
+<kbd>ESC</kbd>   |                                         | Exit full screen / Stop Teleprompter
 <kbd>X</kbd>     |                                         | Flip X Axis
 <kbd>Y</kbd>     |                                         | Flip Y Axis
 <kbd>M</kbd>     |                                         | Move Cue Indicator Up
@@ -58,6 +52,13 @@ Key              | Alternatives                            | Description
 
 # Updates and changes #
 
+## Version 1.1 ##
+
+- **New:** Remote control functionality
+- **Updated:** Increased the range of speeds
+- **Fixes:** Mobile devices count down sometimes glitched
+
+
 ## Version 1.0 ##
 
 - **New:** Full redesign of UI
@@ -66,15 +67,15 @@ Key              | Alternatives                            | Description
 - **New:** Lock text editing to remove accidental changes, especially on mobile devices 
 - **New:** New look with new icons
 - **New:** Grouping of settings for easier 
-- **New:** When editor focused, automatically disable mirroring
-- **New:** Full screen on teleprompter start
+- **New:** When editor focused, automatically disable X,Y mirroring so you can easier edit it
+- **New:** Go full screen when teleprompter starts
 - **New:** New application icon
 - **Updated:** Improved mobile device experience with easier to set sliders
 - **Updated:** Bigger ranges of font sizes
 - **Updated:** Bigger range of scroll speeds
 - **Updated:** Bigger range for cue indicator
 - **Fixes:** Scroll direction on X, Y axis change
-- **Fixes:** On paste remove formating so the text stays correct
+- **Fixes:** On paste remove all formating so the text looks the same
 
 ## Version 0.5 ##
 
