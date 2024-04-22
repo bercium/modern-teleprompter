@@ -22,7 +22,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-        <link rel="stylesheet" href="css/style.css?v=1.1.1">
+        <link rel="stylesheet" href="css/style.css?v=1.2.0">
     </head>
     <body id="gui">
         <div id='count_down'></div>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="offcanvas-body p-0 ">
                     
-                    <div class="text-secondary " style="position: absolute; bottom: 5px; right:10px; font-size: 0.7em; "><a href="https://teleprompter.evolution-team.net" class="text-decoration-none link-secondary">2024 © Ziga Berce</a></div>
+                    <div class="text-secondary copyright" ><a href="https://teleprompter.evolution-team.net" class="text-decoration-none link-secondary">Made with ♥ by Ziga Berce © 2024</a></div>
                     
                     <div class="accordion accordion-flush" id="afMenu">
                         <div class="accordion-item">
@@ -160,14 +160,14 @@
 
                                     <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                                         <li class="nav-item" role="presentation">
-                                            <button class="nav-link active" id="controller-tab" data-bs-toggle="tab" data-bs-target="#controller-tab-pane" type="button" role="tab" aria-controls="controller-tab-pane" aria-selected="true">Controller</button>
+                                            <button class="nav-link active" id="controler-tab" data-bs-toggle="tab" data-bs-target="#controler-tab-pane" type="button" role="tab" aria-controls="controler-tab-pane" aria-selected="true">Controller</button>
                                         </li>
                                         <li class="nav-item" role="presentation">
                                             <button class="nav-link" id="viewer-tab" data-bs-toggle="tab" data-bs-target="#viewer-tab-pane" type="button" role="tab" aria-controls="viewer-tab-pane" aria-selected="false">Viewer</button>
                                         </li>
                                     </ul>
                                     <div class="tab-content my-3" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="controller-tab-pane" role="tabpanel" aria-labelledby="controller-tab" tabindex="0">
+                                        <div class="tab-pane fade show active" id="controler-tab-pane" role="tabpanel" aria-labelledby="controler-tab" tabindex="0">
                                             <div class="form-floating mb-3">
                                                 <input type="text" class="form-control" id="upload_code" value="XXX-XXX-XXXX" disabled>
                                                 <label for="upload_code">Cloud code</label>
@@ -202,12 +202,12 @@
                                 <div class="accordion-body">
                                     
                                     <div class="form-check form-switch mb-2">
-                                        <input id="voice_controll" class="form-check-input" type="checkbox" role="switch" title="Voice controlled teleprompter" >
-                                        <label class="form-check-label" for="voice_controll">Scroll follows voice</label>
+                                        <input id="voice_control" class="form-check-input" type="checkbox" role="switch" title="Voice controled teleprompter" >
+                                        <label class="form-check-label" for="voice_control">Scroll follows voice</label>
                                     </div>
                                     
                                     <p class="mb-1">Spoken language</p>
-                                    <select name="language" id="language" class="form-select" >
+                                    <select name="voice_control_language" id="voice_control_language" class="form-select" >
                                         <option value="af-ZA">Afrikaans</option>
                                         <option value="am-ET">አማርኛ</option>
                                         <option value="az-AZ">Azərbaycanca</option>
@@ -230,7 +230,7 @@
                                         <option value="en-ZA">English / South Africa</option>
                                         <option value="en-PH">English / Philippines</option>
                                         <option value="en-GB">English / United Kingdom</option>
-                                        <option value="en-US" selected>English / United States</option>
+                                        <option value="en-US">English / United States</option>
                                         <option value="es-AR">Español / Argentina</option>
                                         <option value="es-BO">Español / Bolivia</option>
                                         <option value="es-CL">Español / Chile</option>
@@ -333,7 +333,7 @@
                             <i class="bi bi-play-circle fs-1"></i>
                         </button>
                         
-                        <button id="pause_prompter" class="btn btn-link" type="button">
+                        <button id="stop_prompter" class="btn btn-link" type="button">
                             <i class="bi bi-stop-circle fs-1"></i>
                         </button>
                         
@@ -343,13 +343,20 @@
                     </div>
                 </div>
                
-            </div>  
+            </div>
             <div class="overlay">
+                
+                <button id="pause_prompter" class="btn btn-link" type="button">
+                    <i class="bi bi-pause-circle"></i>
+                </button>
+                
                 <div class="top"></div>
                 <div class="bottom"></div>
             </div>
             <div class="teleprompter" id="teleprompter" contenteditable>
-                <p>Oh, hi there. <b>Welcome to this feature-packed modern Teleprompter</b>. It does some pretty cool things, for example:
+                <p>Oh, hi there. <b>Welcome to this feature-packed modern Teleprompter</b>. It does some pretty cool things, for example:<br>
+                You can control it with your voice and it will move the text accordingly. Or just set the speed that suits you and read along.
+                </p><p>
                 You can edit the text right here on the page or send it to your device remotely.
                 </p><p>
                 It will save all your settings and text automatically. So forget about losing all your work if something unexpected happens. You can send both settings and text separately to any device you use as a viewer.
@@ -360,7 +367,8 @@
                 </p><p>
                 If you are a keyboard wizard we have you covered with a bunch of keyboard shortcuts:
                 </p><p>
-                <kbd>SPACE</kbd> & <kbd>P</kbd> - Start / Stop Teleprompter<br>
+                <kbd>P</kbd> & <kbd>ESC</kbd> - Start / Stop Teleprompter<br>
+                <kbd>SPACE</kbd> - Pause / Un-Pause Teleprompter<br>
                 <kbd>←</kbd> - Slow Down Teleprompter<br>
                 <kbd>→</kbd> - Speed Up Teleprompter<br>
                 <kbd>↑</kbd> - Scroll Teleprompter Down<br>
@@ -391,7 +399,7 @@
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/helpers.js?v=1.1.0"></script>
-        <script src="js/SpeachRecognizer.js?v=1.1.1"></script>
-        <script src="js/script.js?v=1.1.1"></script>
+        <script src="js/SpeachRecognizer.js?v=1.2.0"></script>
+        <script src="js/script.js?v=1.2.0"></script>
     </body>
 </html>

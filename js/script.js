@@ -12,6 +12,8 @@
         initReadingTimer = false,
         initFontBold = false,
         initTextLock = false,
+        initVoiceControll = false,
+        initVoiceControllLanguage = 'en-US',
         initStartDelay = 0, // before we start how much delay
         initRemoteCode = random_string(),
         coutdownTimer,
@@ -97,6 +99,9 @@
         
         $("input[name='start_delay']").on("change",function () { startDelay(); });
         
+        $('#voice_control').on("change", function () { voiceControll(true) });
+        $('#voice_control_language').on("change", function () { voiceControllLanguage(true) });
+        
         // teleprompter actions, editing and focus changes
         $('#teleprompter').on("keyup",function () { teleprompterUpdate(); })
                           .on("focusin",function(){ teleprompterFocus(true) })
@@ -110,7 +115,8 @@
         
         // Listen for Play Button Click
         $('#start_prompter, #start_prompter_display').on("click",function () { teleprompterStart(); });
-        $('#pause_prompter').on("click",function () { teleprompterStop(); }).hide();
+        $('#stop_prompter').on("click",function () { teleprompterStop(); }).hide();
+        $('#pause_prompter').on("click",function () { teleprompterPause(); }).hide();
         
         $('#cloud_upload').on("click",function () { cloudSaveData(); });
         $('#cloud_download_settings').on("click",function () { cloudLoadData("settings"); });
@@ -162,8 +168,8 @@
         if (save) config.set('teleprompter_background_color', color);
     }
     
-    function startDelay() {
-        config.set('teleprompter_start_delay',Number($("input[name='start_delay']:checked").val()));
+    function startDelay(save) {
+        if (save) config.set('teleprompter_start_delay',Number($("input[name='start_delay']:checked").val()));
     }
 
     // Manage Font Size Change
@@ -238,6 +244,16 @@
         else $('.timer_container').hide();
 
         if (save) config.set('teleprompter_reading_timer', $('#reading_timer').is(":checked"));
+    }
+    
+    
+    function voiceControll(save) {
+        if (save) config.set('teleprompter_voice_control', $('#voice_control').is(":checked"));
+    }
+    
+    
+    function voiceControllLanguage(save) {
+        if (save) config.set('teleprompter_voice_control_language', $('#voice_control_language').val());
     }
     
     function readingMarker(save) {
@@ -357,13 +373,13 @@
     
     function speechResult(type, finalRes, interimRes) {
         
-        if (type == 'error' || type == 'end') {
+        if (type == 'error') {
           //this.addMessage('error', interimRes);
           console.log(interimRes);
           if (speechRec !== null) teleprompterStop();
           //this.applySettings();
         } else if (type == 'result') {
-            
+                      
           finalRes = splitResult(finalRes);
           interimRes = splitResult(interimRes);
           
@@ -374,8 +390,9 @@
           
           matchHistory.push(match);
           
-          if (currentPosition >= recText.length) teleprompterStop();
-          else speachProgress(currentPosition);
+          /*if (currentPosition >= recText.length) teleprompterStop();
+          else speachProgress(currentPosition);*/
+          if (currentPosition < recText.length) speachProgress(currentPosition);
         }
     }
     
@@ -387,7 +404,6 @@
         } else {
             if ($("#voiceprompter").is(":hidden")) return;
             for (let i = 0; i < position; i++) $(".word_" + i).css("opacity", "0.3");
-
 
             let scrollToElem = $(".word_"+position);
             let top = scrollToElem.offset().top;
@@ -408,18 +424,20 @@
         initOffcanvas.hide();
         
         $('#teleprompter').attr('contenteditable', false);
-        $('article').addClass('playing');
+        $('article').addClass('playing').removeClass('paused');
         
         $('.overlay').not('.nomarker').fadeIn('fast');
         $('#menu_burger_icon, #start_prompter_display').hide();
-        $('#pause_prompter').show();
+        $('#stop_prompter').show();
+        $('#pause_prompter').hide();
+        
         
         fullScreenEnter();
         
         timer.resetTimer();
         
-        // voice controll
-        if ($("#voice_controll").is(":checked")){
+        // voice control
+        if ($("#voice_control").is(":checked")){
             adaptText();
 
             speechPosition = 0;
@@ -462,21 +480,29 @@
     }
     
     function teleprompterPause() {
-        if (speechRec !== null) speechRec.stop();
-        timer.stopTimer();
-        clearTimeout(scrollDelay);
-        
-        //upause
-        if (speechRec !== null) speechRec.start();
-        timer.startTimer();
-        pageScroll();
+        if (!$('article').hasClass('playing')) return;
+            
+        if ($('article').hasClass('paused')){
+            $('article').removeClass('paused');
+            $('#pause_prompter').fadeOut();
+            timer.startTimer();
+            if ($("#voice_control").is(":checked")){
+                if (speechRec !== null) speechRec.start();
+            }else pageScroll();
+        }else{
+            $('article').addClass('paused');
+            $('#pause_prompter').fadeIn('fast');
+            if (speechRec !== null) speechRec.stop();
+            timer.stopTimer();
+            clearTimeout(scrollDelay);            
+        }
     }
 
     // Stop Teleprompter
     function teleprompterStop() {
         fullScreenExit();
         
-        if ($("#voice_controll").is(":checked")){
+        if ($("#voice_control").is(":checked")){
             if (speechRec !== null) speechRec.stop();
             currentPosition = 0;
             speachProgress(0,true);
@@ -494,10 +520,12 @@
         initOffcanvas.show();
         
         $('.overlay').fadeOut('slow');
-        $('article').removeClass('playing');
+        $('article').removeClass('playing').removeClass('paused');
         $('#menu_burger_icon, #start_prompter_display').show();
-        $('#pause_prompter').hide();
+        $('#stop_prompter').hide();
         $("#count_down").removeClass("active").html("");
+        
+        $('#pause_prompter').hide();
 
         if ($('#reading_timer').is(":checked")){
             timer.stopTimer();
@@ -630,6 +658,9 @@
         $('#text_lock').prop('checked', dataFromStorage("teleprompter_text_lock",initTextLock,data));
         
         $("input[name='start_delay'][value="+dataFromStorage("teleprompter_start_delay",initStartDelay,data)+"]").prop("checked",true);
+        
+        $("#voice_control").prop('checked', dataFromStorage("teleprompter_voice_control",initVoiceControll,data));
+        $("#voice_control_language option[value='"+dataFromStorage("teleprompter_voice_control_language",initVoiceControllLanguage,data)+"']").prop("selected",true);
     }
     
     function setSettings(save) {
@@ -645,6 +676,8 @@
         readingMarker(save);
         markerPosition(save);
         readingTimer(save);
+        voiceControll(save);
+        voiceControllLanguage(save);
     }
     
     
@@ -669,6 +702,10 @@
             teleprompter_start_delay:$("input[name='start_delay']:checked").val(),
             
             teleprompter_remote_code:initRemoteCode,
+            
+            teleprompter_voice_control:$('#voice_control').is(':checked'),
+            teleprompter_voice_control_language:$('#voice_control_language').val(),
+            
             teleprompter_text:$('#teleprompter').html()
         };
         return data;
@@ -678,7 +715,7 @@
        // Listen for Key Presses on Body
     function keyShortcuts(evt) {
         var space = 32,
-            pause = 80, // letter V =  for letter P use 80
+            play = 80, // letter V =  for letter P use 80
             escape = 27,
             left = 37,
             right = 39,
@@ -696,16 +733,18 @@
 
         // Exit if we're inside an input field
         if (typeof evt.target.id == 'undefined' || evt.target.id == 'teleprompter' ||  $(evt.target).is("input") || (evt.target.id != 'gui' && evt.target.id != 'offcanvas')) {
-            console.log(evt.target.id);
+            //console.log("target: "+evt.target.id);
             return true;
         }
 
         // Reset GUI
         if (evt.keyCode == escape) teleprompterStop(); // stop teleprompter
-        else if (evt.keyCode == space || evt.keyCode == pause /* letter v - quieter key*/){
+        if (evt.keyCode == play) {
+            console.log("playing");
             if ($('article').hasClass('playing')) teleprompterStop();
             else teleprompterStart();
-        }  // Start Stop Scrolling
+        }  // stop teleprompter
+        else if (evt.keyCode == space) teleprompterPause();
         else if (evt.keyCode == left) $('#speed').val(Number($('#speed').val()) - 2).change(); // Decrease Speed with Left Arrow
         else if (evt.keyCode == right) $('#speed').val(Number($('#speed').val()) + 2).change(); // Increase Speed with Right Arrow
         else if (evt.keyCode == font_down) $('#font_size').val(Number($('#font_size').val())-1).change();   // Decrease Font Size with Minus

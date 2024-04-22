@@ -183,3 +183,22 @@ article .teleprompter.flipxy
         opacity:0;
     }
 }
+.copyright{
+    position: absolute; 
+    bottom: 5px; 
+    left:10px; 
+    font-size: 0.7em;
+}
+
+#pause_prompter{
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+
+#pause_prompter i{
+    font-size:30vmin;
+}

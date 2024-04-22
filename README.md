@@ -18,6 +18,7 @@ Feel free to check-out the features below or try out a free online version.
 
 ## Features ##
 
+- [X] Voice control with 100 supported languages
 - [X] Edit text in the browser or send it remotely to any device
 - [X] Full mobile phone and tablet support
 - [X] Mirror ready - Flip X, Y or both axis
@@ -33,7 +34,8 @@ Feel free to check-out the features below or try out a free online version.
 
 Key              | Alternatives                            | Description
 :---------------:|:---------------------------------------:|:--------------------------
-<kbd>SPACE</kbd> | <kbd>P</kbd>                            | Start / Stop Teleprompter
+<kbd>P</kbd>     | <kbd>ESC</kbd>                            | Start / Stop Teleprompter
+<kbd>SPACE</kbd> |                                         | Pause / Un-Pause Teleprompter
 <kbd>←</kbd>     |                                         | Slow Down Teleprompter
 <kbd>→</kbd>     |                                         | Speed Up Teleprompter
 <kbd>↑</kbd>     |                                         | Scroll Teleprompter Down
@@ -51,6 +53,16 @@ Key              | Alternatives                            | Description
 
 
 # Updates and changes #
+
+## Version 1.2 ##
+
+- **New:** Voice controlled script scroll
+- **New:** Support for 100 voice languages
+- **New:** Saving and loading voice settings remotely
+- **Updated:** Added pause option
+- **Updated:** Changed shortcuts to support pause. Now "P" is for play and "space" for pause.
+- **Fixes:** Fixed error when exiting full screen
+
 
 ## Version 1.1 ##
 
