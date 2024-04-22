@@ -85,6 +85,9 @@ article .teleprompter.flipxy
     /*pointer-events: none;*/
     padding: 1000px 50px 300px 100px !important;
 }
+#voiceprompter{
+    display: none;
+}
 .marker
 {
     position: fixed;
