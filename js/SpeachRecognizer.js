@@ -1,4 +1,4 @@
-var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 class SpeechRecognizer {
   constructor(eventListener = () => {}, lang = 'en-US') {

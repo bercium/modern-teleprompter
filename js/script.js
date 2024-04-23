@@ -121,6 +121,8 @@
         $('#cloud_upload').on("click",function () { cloudSaveData(); });
         $('#cloud_download_settings').on("click",function () { cloudLoadData("settings"); });
         $('#cloud_download_text').on("click",function () { cloudLoadData("text"); });
+        
+        $('#error button').on("click",function () { $('#error_continer').fadeOut('slow') });
 
         // set initial UI
         
@@ -134,9 +136,12 @@
             teleprompterClean();
         }*/
         
+        showError("testni error");
+        
         // Run initial configuration
         setSettings(false);
-
+        
+        speechRec = new SpeechRecognizer((a, b, c) => speechResult(a, b, c), $("#voice_control_language").val());
     });
     
     
@@ -324,15 +329,17 @@
                         teleprompterUpdate();
                     }
                 } else {
-                    console.error(response.error);
-                    alert(response.error);
+                    showError(response.error);
+                    //console.error(response.error);
+                    //alert(response.error);
                     // Handle the error (e.g., display a message to the user)
                 }
             },
             error: function (xhr, status, error) {
                 $('#cloud_download i').addClass("bi-cloud-arrow-down").removeClass("bi-cloud-download-fill");
-                console.error("Error fetching data: ", error);
-                alert(error);
+                showError("Error fetching data: "+error);
+                //console.error("Error fetching data: ", error);
+                //alert(error);
             }
         });
     }
@@ -375,7 +382,15 @@
         
         if (type == 'error') {
           //this.addMessage('error', interimRes);
-          console.log(interimRes);
+          
+          if (finalRes == "API not available" || finalRes == "API not working"){
+              $("#voice_control").prop("disabled",true).prop("checked",false);
+              $("#voice_control_language").prop("disabled",true);
+              $("#voice_control_error").removeClass("d-none").show().html(interimRes);
+              
+              if ($("article").hasClass("playing")) showError(interimRes);
+          }
+          //console.log(finalRes+" - "+interimRes);
           if (speechRec !== null) teleprompterStop();
           //this.applySettings();
         } else if (type == 'result') {
@@ -443,7 +458,8 @@
             speechPosition = 0;
             currentRecording = [];
             currentMatchArray = [];
-            speechRec = new SpeechRecognizer((a, b, c) => speechResult(a, b, c), $("#language").val());
+            
+            speechRec.reset($("#voice_control_language").val());
 
             $('#teleprompter').hide();
             $('#voiceprompter').show();
@@ -639,6 +655,11 @@
         }else return fallbackValue;
     }
     
+    function showError(error){
+        $("#error_continer").fadeIn('fast');
+        $("#error span").html(error);
+    }
+    
     function loadSettingsData(data = {}){
         
         $('#speed').val(Number(dataFromStorage("teleprompter_speed",initPageSpeed,data)));
@@ -659,8 +680,10 @@
         
         $("input[name='start_delay'][value="+dataFromStorage("teleprompter_start_delay",initStartDelay,data)+"]").prop("checked",true);
         
-        $("#voice_control").prop('checked', dataFromStorage("teleprompter_voice_control",initVoiceControll,data));
-        $("#voice_control_language option[value='"+dataFromStorage("teleprompter_voice_control_language",initVoiceControllLanguage,data)+"']").prop("selected",true);
+        if (!$("#voice_control").prop('disabled')){
+            $("#voice_control").prop('checked', dataFromStorage("teleprompter_voice_control",initVoiceControll,data));
+            $("#voice_control_language option[value='"+dataFromStorage("teleprompter_voice_control_language",initVoiceControllLanguage,data)+"']").prop("selected",true);
+        }
     }
     
     function setSettings(save) {
@@ -740,7 +763,6 @@
         // Reset GUI
         if (evt.keyCode == escape) teleprompterStop(); // stop teleprompter
         if (evt.keyCode == play) {
-            console.log("playing");
             if ($('article').hasClass('playing')) teleprompterStop();
             else teleprompterStart();
         }  // stop teleprompter

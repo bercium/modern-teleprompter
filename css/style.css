@@ -202,3 +202,12 @@ article .teleprompter.flipxy
 #pause_prompter i{
     font-size:30vmin;
 }
+
+#error_continer{
+    position:fixed; 
+    top: 0px;
+    z-index: 2000;
+    left: 50%;
+    transform: translate(-50%, 0);
+    display:none;
+}

@@ -26,7 +26,12 @@
     </head>
     <body id="gui">
         <div id='count_down'></div>
-
+        <div class="error_continer p-2" id="error_continer">
+            <div class="alert alert-danger mx-auto" id="error" role="alert">
+                <span>The WebSpeech API in your browser is not working. Use Chrome.</span>
+                <button type="button" class="btn-close float-end" aria-label="Close"></button>
+            </div>
+        </div>
         <aside class='bd-sidebar'>
             <div id="offcanvas" class="offcanvas offcanvas-start show" tabindex="-1" data-bs-scroll="true" data-bs-backdrop="false"  aria-labelledby="offcanvasResponsiveLabel">
                 <div class="offcanvas-header text-center">
@@ -40,6 +45,7 @@
                 <div class="offcanvas-body p-0 ">
                     
                     <div class="text-secondary copyright" ><a href="https://teleprompter.evolution-team.net" class="text-decoration-none link-secondary">Made with ♥ by Ziga Berce © 2024</a></div>
+                    
                     
                     <div class="accordion accordion-flush" id="afMenu">
                         <div class="accordion-item">
@@ -200,6 +206,9 @@
                             </h2>
                             <div id="flush-5" class="accordion-collapse collapse">
                                 <div class="accordion-body">
+                                    <div class="alert alert-danger d-none" id="voice_control_error" role="alert">
+                                      The WebSpeech API in your browser is not working. Use Chrome.
+                                    </div>
                                     
                                     <div class="form-check form-switch mb-2">
                                         <input id="voice_control" class="form-check-input" type="checkbox" role="switch" title="Voice controled teleprompter" >
