@@ -136,8 +136,6 @@
             teleprompterClean();
         }*/
         
-        showError("testni error");
-        
         // Run initial configuration
         setSettings(false);
         
