@@ -35,17 +35,17 @@ If you or your company enjoy using this project, please consider supporting me. 
 
 Key              | Alternatives                            | Description
 :---------------:|:---------------------------------------:|:--------------------------
-<kbd>P</kbd>     | <kbd>ESC</kbd>                            | Start / Stop Teleprompter
-<kbd>SPACE</kbd> |                                         | Pause / Un-Pause Teleprompter
-<kbd>←</kbd>     |                                         | Slow Down Teleprompter
-<kbd>→</kbd>     |                                         | Speed Up Teleprompter
+<kbd>P</kbd>     |                                         | Start / Stop Teleprompter
+<kbd>SPACE</kbd> | <kbd>B</kbd> <kbd>F5</kbd> <kbd>.</kbd> | Pause / Un-Pause Teleprompter
+<kbd>ESC</kbd>   |                                         | Stop Teleprompter / Exit full screen
+<kbd>←</kbd>     | <kbd>PAGE UP</kbd>                      | Slow Down Teleprompter
+<kbd>→</kbd>     | <kbd>PAGE DOWN</kbd>                    | Speed Up Teleprompter
 <kbd>↑</kbd>     |                                         | Scroll Teleprompter Down
 <kbd>↓</kbd>     |                                         | Scroll Teleprompter Up
 <kbd>G</kbd>     |                                         | Increase Font Size
 <kbd>F</kbd>     |                                         | Decrease Font Size
 <kbd>E</kbd>     |                                         | Increase Teleprompter Width
 <kbd>W</kbd>     |                                         | Decrease Teleprompter Width
-<kbd>ESC</kbd>   |                                         | Exit full screen / Stop Teleprompter
 <kbd>X</kbd>     |                                         | Flip X Axis
 <kbd>Y</kbd>     |                                         | Flip Y Axis
 <kbd>M</kbd>     |                                         | Move Cue Indicator Up
