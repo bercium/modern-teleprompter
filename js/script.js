@@ -755,7 +755,7 @@
             page_down = 34, // page down
             b_key = 66,
             f5_key = 116,
-            period_key = 190,
+            period_key = 190;
 
         // Exit if we're inside an input field
         if (typeof evt.target.id == 'undefined' || evt.target.id == 'teleprompter' ||  $(evt.target).is("input") || (evt.target.id != 'gui' && evt.target.id != 'offcanvas')) {
