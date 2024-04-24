@@ -750,7 +750,12 @@
             width_down = 87, // W char
             marker_up = 77, // M char
             marker_down = 78, // N char
-            load_key = 76; // L char
+            load_key = 76 // L char
+            page_up = 33,  // page up
+            page_down = 34, // page down
+            b_key = 66,
+            f5_key = 116,
+            period_key = 190,
 
         // Exit if we're inside an input field
         if (typeof evt.target.id == 'undefined' || evt.target.id == 'teleprompter' ||  $(evt.target).is("input") || (evt.target.id != 'gui' && evt.target.id != 'offcanvas')) {
@@ -764,9 +769,9 @@
             if ($('article').hasClass('playing')) teleprompterStop();
             else teleprompterStart();
         }  // stop teleprompter
-        else if (evt.keyCode == space) teleprompterPause();
-        else if (evt.keyCode == left) $('#speed').val(Number($('#speed').val()) - 2).change(); // Decrease Speed with Left Arrow
-        else if (evt.keyCode == right) $('#speed').val(Number($('#speed').val()) + 2).change(); // Increase Speed with Right Arrow
+        else if (evt.keyCode == space || [b_key, f5_key, period_key].includes(evt.keyCode)) teleprompterPause();
+        else if (evt.keyCode == left || evt.keyCode == page_up) $('#speed').val(Number($('#speed').val()) - 2).change(); // Decrease Speed with Left Arrow
+        else if (evt.keyCode == right || evt.keyCode == page_down) $('#speed').val(Number($('#speed').val()) + 2).change(); // Increase Speed with Right Arrow
         else if (evt.keyCode == font_down) $('#font_size').val(Number($('#font_size').val())-1).change();   // Decrease Font Size with Minus
         else if (evt.keyCode == font_up) $('#font_size').val(Number($('#font_size').val())+1).change();  // Increase Font Size with Plus
         else if (evt.keyCode == down) $('article').scrollTop($('article').scrollTop() - Number($('#font_size').val()) / 4); // Move scroller down
