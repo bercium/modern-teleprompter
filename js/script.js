@@ -938,7 +938,7 @@
 
     function ceilIndex(tail, l, r, val) {
         while (r - l > 1) {
-            m = l + Math.floor((r - l) / 2);
+            let m = l + Math.floor((r - l) / 2);
             if (val <= tail[m])
                 r = m;
             else
