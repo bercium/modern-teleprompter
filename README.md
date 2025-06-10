@@ -14,8 +14,7 @@ If you or your company enjoy using this project, please consider supporting me. 
 
 ![Screenshot](img/setup-screen.png "Setup screen")
 
-![Screenshot](img/player-screen.png "Player screen")
-
+![Screenshot](https://github.com/user-attachments/assets/fefc4199-5425-4ecb-8b0b-4ab6403c8e62)
 
 ## Features ##
 
