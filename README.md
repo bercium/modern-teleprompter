@@ -51,7 +51,7 @@ Key              | Alternatives                            | Description
 <kbd>Y</kbd>     |                                         | Flip Y Axis
 <kbd>M</kbd>     |                                         | Move Cue Indicator Up
 <kbd>N</kbd>     |                                         | Move Cue Indicator Down
-<kbd>L</kbd>     |                                         | Download Text From Server
+<kbd>L</kbd>     |                                         | Load Text From Server
 
 
 
