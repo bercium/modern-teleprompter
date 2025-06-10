@@ -20,7 +20,7 @@ timer.increase=function(){if(timer.currentVal<timer.options.stopVal){timer.curre
 if(typeof timer.options.onChange==='function'){timer.options.onChange(timer.formate(timer.currentVal))}}
 timer.decrease=function(){if(timer.currentVal>timer.options.stopVal){timer.currentVal--;timer.target.text(timer.formate(timer.currentVal));if(timer.currentVal==timer.options.stopVal){timer.onFinish()}}else{timer.onFinish()}
 if(typeof timer.options.onChange==='function'){timer.options.onChange(timer.formate(timer.currentVal))}}
-timer.onFinish=function(){clearInterval(timer.interval);timer.interval=!1;eval(timer.callback());if(timer.options.loop){timer.target.resetTimer();timer.target.startTimer()}
+timer.onFinish=function(){clearInterval(timer.interval);timer.interval=!1;timer.callback.call(timer.target);if(timer.options.loop){timer.target.resetTimer();timer.target.startTimer()}
 if(typeof timer.options.onChange==='function'){timer.options.onChange(timer.formate(timer.currentVal))}}
 timer.target.text(timer.formate(timer.options.startVal));if(timer.options.autostart){this.startTimer()}
 return this}})(jQuery);
