@@ -323,7 +323,7 @@
                         setSettings(true);
                     }
                     else{
-                        $('#teleprompter').html(response.teleprompter_text);
+                        $('#teleprompter').html(sanitizeText(response.teleprompter_text));
                         teleprompterUpdate();
                     }
                 } else {
@@ -631,8 +631,12 @@
 
         return randomstring;
     }
-    
-    
+
+    function sanitizeText(text){
+        return text.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<[^>]*>/g,'');
+    }
+
+
     function fullScreenEnter(){
         var elem = document.body;
         if (elem.requestFullscreen) {
