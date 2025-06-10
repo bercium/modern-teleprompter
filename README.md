@@ -10,11 +10,6 @@ If you or your company enjoy using this project, please consider supporting me. 
 
 [![Donate via PayPal](https://img.shields.io/badge/Donate-169BD7.svg?logo=paypal&logoColor=white&style=for-the-badge "Donate via PayPal")](https://paypal.me/zigaberce)
 
-## Screenshots ##
-
-![Screenshot](img/setup-screen.png "Setup screen")
-
-![Screenshot](https://github.com/user-attachments/assets/fefc4199-5425-4ecb-8b0b-4ab6403c8e62)
 
 ## Features ##
 
@@ -28,6 +23,13 @@ If you or your company enjoy using this project, please consider supporting me. 
 - [X] Go full screen automatically
 - [X] Remote control settings and text separately
 - [X] Changes saved automatically
+
+
+## Screenshots ##
+
+![Screenshot](img/setup-screen.png "Setup screen")
+
+![Screenshot](https://github.com/user-attachments/assets/fefc4199-5425-4ecb-8b0b-4ab6403c8e62)
 
 
 ## Keyboard Shortcuts ##
