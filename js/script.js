@@ -588,9 +588,33 @@
     // ********   Other functions
     
     function pasteCleanText(e){
+        // paste plain text using modern clipboard API when available
         e.preventDefault();
-        var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-        document.execCommand("insertHTML", false, text);
+
+        var insert = function(text){
+            if (document.queryCommandSupported && document.queryCommandSupported('insertText')) {
+                document.execCommand('insertText', false, text);
+            } else if (document.execCommand) {
+                document.execCommand('insertHTML', false, text);
+            } else {
+                var sel = window.getSelection();
+                if (sel.rangeCount) {
+                    sel.deleteFromDocument();
+                    sel.getRangeAt(0).insertNode(document.createTextNode(text));
+                    sel.collapseToEnd();
+                }
+            }
+        };
+
+        if (navigator.clipboard && navigator.clipboard.readText) {
+            navigator.clipboard.readText().then(insert).catch(function(){
+                var text = (e.clipboardData || window.clipboardData).getData('text');
+                insert(text);
+            });
+        } else {
+            var text = (e.clipboardData || window.clipboardData).getData('text');
+            insert(text);
+        }
     }
     
 
