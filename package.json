@@ -1,0 +1,13 @@
+{
+  "name": "modern-teleprompter",
+  "version": "1.0.0",
+  "description": "A feature packed modern Teleprompter, with everything you need to read the text from a screen or teleprompter.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/sanitizeText.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
