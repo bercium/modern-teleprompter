@@ -8,7 +8,7 @@ Feel free to check-out the features below or try out a free online version.
 
 If you or your company enjoy using this project, please consider supporting me. 💖
 
-[![Donate via PayPal](https://img.shields.io/badge/Donate-169BD7.svg?logo=paypal&logoColor=white&style=for-the-badge "Donate via PayPal")]([https://www.paypal.me/manifestinteractive](https://paypal.me/zigaberce))
+[![Donate via PayPal](https://img.shields.io/badge/Donate-169BD7.svg?logo=paypal&logoColor=white&style=for-the-badge "Donate via PayPal")](https://paypal.me/zigaberce)
 
 ## Screenshots ##
 
