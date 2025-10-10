@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Record a Match</title>
+    <link rel="stylesheet" href="../css/tennis.css" />
+  </head>
+  <body class="record-match">
+    <main class="layout">
+      <header class="page-header">
+        <h1>Record a Match</h1>
+        <p class="page-subtitle">Capture every detail from your recent ladder match.</p>
+      </header>
+
+      <form class="card match-form" novalidate>
+        <fieldset>
+          <legend>Match details</legend>
+          <label class="field" for="match-category">
+            <span class="field-label">Match category</span>
+            <select id="match-category" name="match-category">
+              <option value="ladder">Ladder</option>
+              <option value="league">League</option>
+              <option value="friendly">Friendly</option>
+              <option value="training">Training</option>
+              <option value="tournament">Tournament</option>
+            </select>
+          </label>
+
+          <label class="field" for="match-location">
+            <span class="field-label">Location</span>
+            <select id="match-location" name="match-location">
+              <option value="" data-city="" data-country="" data-place="">Select previous location</option>
+              <option value="london" data-city="London" data-country="United Kingdom" data-place="Wimbledon Lawn Tennis Club">London, United Kingdom</option>
+              <option value="ljubljana" data-city="Ljubljana" data-country="Slovenia" data-place="Tenis klub za Savo">Ljubljana, Slovenia</option>
+              <option value="zagreb" data-city="Zagreb" data-country="Croatia" data-place="Maksimir Tennis Center">Zagreb, Croatia</option>
+            </select>
+          </label>
+          <p id="location-preview" class="location-preview" aria-live="polite"></p>
+
+          <label class="field" for="match-notes">
+            <span class="field-label">Notes</span>
+            <textarea id="match-notes" name="match-notes" rows="3"></textarea>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Score</legend>
+          <div class="sets">
+            <label class="field" for="set-1">
+              <span class="field-label">Set 1</span>
+              <input id="set-1" type="text" inputmode="numeric" placeholder="6-4" />
+            </label>
+            <label class="field" for="set-2">
+              <span class="field-label">Set 2</span>
+              <input id="set-2" type="text" inputmode="numeric" placeholder="4-6" />
+            </label>
+            <label class="field" for="set-3">
+              <span class="field-label">Set 3</span>
+              <input id="set-3" type="text" inputmode="numeric" placeholder="7-6" />
+            </label>
+          </div>
+
+          <details id="tiebreak" class="tiebreak">
+            <summary>Tiebreak details</summary>
+            <div class="tiebreak-body" id="tiebreak-body">
+              <p class="hint">Enter the points from the deciding tiebreak.</p>
+              <label class="field" for="tiebreak-score">
+                <span class="field-label">Tiebreak score</span>
+                <input id="tiebreak-score" type="text" inputmode="numeric" placeholder="10-8" />
+              </label>
+              <label class="field" for="tiebreak-notes">
+                <span class="field-label">Notes</span>
+                <textarea id="tiebreak-notes" rows="2"></textarea>
+              </label>
+            </div>
+          </details>
+        </fieldset>
+
+        <footer class="form-actions">
+          <button type="submit" class="btn primary">Save match</button>
+          <button type="reset" class="btn">Cancel</button>
+        </footer>
+      </form>
+    </main>
+
+    <script src="../js/record-match.js" type="module"></script>
+  </body>
+</html>
